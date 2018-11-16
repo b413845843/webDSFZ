@@ -1,7 +1,7 @@
 import Axios from 'axios'
 // import vm from '@/main'
 const service = Axios.create({
-    timeout: 8000
+    timeout: 4000
 })
 
 export default service;

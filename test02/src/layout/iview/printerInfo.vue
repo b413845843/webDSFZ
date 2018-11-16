@@ -104,7 +104,6 @@ import {getPrinterList,getPrinterInfo,addPrinter,editPrinter,deletePrinter,getVe
 import { Node,parseNode,parseNode2 } from "@/tools/parseJsonToNode";
 import nodeView from '@/layout/iview/component/nodeView.vue'
 
-info('fuck you !!')
 const status = ['Ready','Busy','Warn','Error','None','Dead']
 function defaultInfo () {
     
