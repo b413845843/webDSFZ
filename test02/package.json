@@ -10,6 +10,7 @@
     "dependencies": {
         "axios": "^0.18.0",
         "iview": "^3.1.5",
+        "log4js": "^3.0.6",
         "nprogress": "^0.2.0",
         "vue": "^2.5.17"
     },

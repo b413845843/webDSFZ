@@ -11,15 +11,14 @@
                     <Checkbox label="None"></Checkbox>
                 </CheckboxGroup>
           </Tag>
-        <node-view></node-view>
              <!-- <Button type="info" @click="clickFilter"><Icon type="md-search" size=16 />过滤 </Button> -->
             <Button type="info" @click="fetchData"><Icon type="md-refresh" size=16 /> 刷新列表</Button>
           <!-- <Button type="success" @click="showAddModal"><Icon type="md-add" />添加</Button> -->
           <!-- <Button type="error"><Icon type="md-trash" />删除全部</Button> -->
        
-          <Poptip placement="left" style="float:right;margin-right:10px;">
+          <Poptip  trigger="hover" placement="left" @on-popper-show="fetchVersion" style="float:right;margin-right:10px;">
               
-              <Button type="text" @click="fetchVersion"><Icon type="md-information-circle" size=14 /> 版本信息</Button>
+              <Button type="text" ><Icon type="md-information-circle" size=14 /> 版本信息</Button>
                 <div v-if="version" class="versionSpan" slot="content"> 
                     <p>webVer : 1.0.0.1</p>
                     <p> dsPrnService : {{version.dsPrnService.Ver}} </p>
@@ -105,7 +104,7 @@ import {getPrinterList,getPrinterInfo,addPrinter,editPrinter,deletePrinter,getVe
 import { Node,parseNode,parseNode2 } from "@/tools/parseJsonToNode";
 import nodeView from '@/layout/iview/component/nodeView.vue'
 
-
+info('fuck you !!')
 const status = ['Ready','Busy','Warn','Error','None','Dead']
 function defaultInfo () {
     
@@ -350,7 +349,6 @@ export default {
                 console.log(res.data);
             }).catch(err=>{
                 console.log(`catch ${err}`);
-                
             })
 
 

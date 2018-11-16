@@ -10,7 +10,6 @@ import 'nprogress/nprogress.css'
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
 
-
 //自定义组件
 
 import dotLink from '@/layout/iview/component/dotLink'
@@ -18,6 +17,8 @@ import nodeView from '@/layout/iview/component/nodeView'
 import configView from '@/layout/iview/component/configView'
 import printView from '@/layout/iview/component/printView'
 import moreInfoRow from '@/layout/iview/component/moreInfoRow'
+
+
 
 Vue.config.productionTip = false
 
