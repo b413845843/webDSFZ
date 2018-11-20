@@ -1,3 +1,4 @@
+/* eslint-disable */
 const mock = [{
   "WIFI.Generic.*": {
     "Datas": {
