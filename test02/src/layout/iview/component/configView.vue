@@ -10,30 +10,22 @@
 
     <div v-if="data!=null">
       <Collapse simple accordion v-model="collapse">
-
-
-        <Panel v-for="item,index of data.items" :key='item.name' :name="String(index)">
+        <Panel v-for="(item,index) of data.items" :key='item.name' :name="String(index)">
           {{item.name}}
           <Form v-if="item.items" :label-width="120" slot="content">
             <FormItem v-for="subItem of item.items" :key='subItem.name' :label="subItem.name" class="leaf">
-
               <Input v-if="subItem.dataType == 'string'" v-model="subItem.value" placeholder=""></Input>
               <Input v-else-if="subItem.dataType == 'value'" v-model="subItem.value" placeholder=""></Input>
               <Input v-else-if="subItem.dataType == 'data'" v-model="subItem.value" placeholder=""></Input>
               <Select v-else-if="subItem.dataType == 'list'" v-model="subItem.value">
                 <Option v-for="o in subItem.list" :value="o.index" :key="o.index">{{o.label}}</Option>
               </Select>
-
             </FormItem>
           </Form>
-
-
         </Panel>
       </Collapse>
     </div>
     <p v-else>获取失败</p>
-
-
     <Spin size="large" fix v-if="isLoading"></Spin>
   </Modal>
 </template>
@@ -49,7 +41,6 @@
     display: inline-block;
     text-align: center
   }
-
 
   .leaf {
     padding-left: 0px;
@@ -68,16 +59,17 @@
 </style>
 
 <script>
-  function stringToHex(str) {
-    var val = "";
-    for (var i = 0; i < str.length; i++) {
-      if (val == "")
-        val = str.charCodeAt(i).toString(16);
-      else
-        val += "," + str.charCodeAt(i).toString(16);
-    }
-    return val;
-  }
+  // function stringToHex(str) {
+  //   var val = '';
+  //   for (var i = 0; i < str.length; i++) {
+  //     if (val === '') {
+  //       val = str.charCodeAt(i).toString(16);
+  //     } else {
+  //       val += ',' + str.charCodeAt(i).toString(16);
+  //     }
+  //   }
+  //   return val;
+  // }
 
   String.prototype.StrCut2Arr = function (n) {
     var str = this;
@@ -89,7 +81,6 @@
         arr.push(strCut);
         str = str.substring(n);
       } else {
-        str = str;
         arr.push(str);
       }
     }
@@ -98,7 +89,7 @@
 
   export default {
     props: {
-      'json': Object,
+      json: Object,
       'show': Boolean,
       'isLoading': Boolean,
       'number': String
@@ -114,12 +105,11 @@
       },
       changeClick(type) {
         this.$emit('get-config', type)
-        this.wod = type == 'WIFI'
+        this.wod = type === 'WIFI'
       },
       getItems(key, obj) {
-
         let sitem = {}
-        if ('object' === typeof (obj[key])) {
+        if (typeof (obj[key]) === 'object') {
           sitem.name = key
 
           if (obj[key]['DataType']) {
@@ -138,17 +128,16 @@
                   label: value
                 }
               })
-
             } else if (dataType === 'data') {
               sitem.value = sitem.value.StrCut2Arr(2).map(v => {
                 return parseInt(v, 16)
               }).join('.')
             }
-            console.log(`key:${key}  type:${ sitem.type}`);
+            console.log(`key:${key}  type:${sitem.type}`);
           } else {
             sitem.items = []
             sitem.type = 'node'
-            console.log(`key:${key}  type:${ sitem.type}`);
+            console.log(`key:${key}  type:${sitem.type}`);
             for (const subKey in obj[key]) {
               sitem.items.push(this.getItems(subKey, obj[key]))
             }
@@ -169,25 +158,22 @@
       data: {
         set(value) {
           console.log(value);
-
+          this.collapse = '0'
         },
-        get() {
+        get: function () {
           if (this.json) {
             let data = {}
-            this.collapse = '0'
             data.items = []
 
-            for (const key in this.json["Edit Items"]) {
-
-              if (key == 'DevID') {
+            for (const key in this.json['Edit Items']) {
+              if (key === 'DevID') {
                 // console.log(`id : ${key}`);
-                data.DevID = this.json["Edit Items"][key]
+                data.DevID = this.json['Edit Items'][key]
 
                 data.Packet = this.json['Cfg Packet'].NodeVal
                 data.path = this.json['Cfg Packet'].path
-
               } else {
-                data.items.push(this.getItems(key, this.json["Edit Items"]))
+                data.items.push(this.getItems(key, this.json['Edit Items']))
               }
             }
 
@@ -200,14 +186,11 @@
             })
 
             if (others.length) {
-
               let othersItem = {}
               othersItem.name = 'Others'
               othersItem.items = others
               data.items.push(othersItem)
             }
-            let a;
-
             return data
           } else {
             return null

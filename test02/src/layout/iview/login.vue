@@ -78,143 +78,136 @@
 
 </style>
 
-
 <script>
-export default {
-  data() {
-    const validatePass = function (rule, value, callback) {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-        console.log("11");
-      } else {
-        if (
-          this.ruser.passwordCheck !== "" &&
-          this.ruser.passwordCheck.length > 0
-        ) {
-          console.log("22");
-
-          this.$refs.registerForm.validateField("passwordCheck");
+  export default {
+    data() {
+      const validatePass = function (rule, value, callback) {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (
+            this.ruser.passwordCheck !== '' &&
+            this.ruser.passwordCheck.length > 0
+          ) {
+            this.$refs.registerForm.validateField('passwordCheck');
+          }
+          if (this.ruser.passwordCheck === '') {
+            this.$refs.registerForm.validateField('passwordCheck');
+          }
+          callback();
         }
-        if (this.ruser.passwordCheck === "") {
-          this.$refs.registerForm.validateField("passwordCheck");
+      }.bind(this);
+      const validatePassCheck = function (rule, value, callback) {
+        if (this.ruser.password === '') {
+          this.$refs.registerForm.validateField('password');
+        } else if (value === '' || value.length <= 0) {
+          callback(new Error('请再次输入密码'));
+        } else if (this.ruser.password !== value) {
+          callback(new Error('两次输入密码不一致'));
+        } else {
+          callback();
         }
-        callback();
-      }
-    }.bind(this);
-    const validatePassCheck = function (rule, value, callback) {
-      if (this.ruser.password === "") {
-        this.$refs.registerForm.validateField("password");
-      } else if (value == "" || value.length <= 0) {
-        console.log("33");
-        callback(new Error("请再次输入密码"));
-      } else if (this.ruser.password !== value) {
-        console.log("44");
-        callback(new Error("两次输入密码不一致"));
-      } else {
-        console.log("55");
-        callback();
-      }
-    }.bind(this);
+      }.bind(this);
 
-    return {
-      isLogin: true,
-      loginging: false,
-      rules: {
-        name: [{
-          required: true,
-          message: '用户名不能为空',
-          trigger: 'blur'
-        }],
-        password: [{
-          required: true,
-          message: '密码名不能为空',
-          trigger: 'blur'
-        }],
-        passwordCheck: [{
-          required: true,
-          message: '密码名不能为空',
-          trigger: 'blur'
-        }],
-        email: [{
-          required: true,
-          message: '密码名不能为空',
-          trigger: 'blur'
-        }]
-      },
-      resigsterRules: {
-        name: [{
-          required: true,
-          message: '用户名不能为空',
-          trigger: 'blur'
-        }],
-        password: [{
-            validator: validatePass,
+      return {
+        isLogin: true,
+        loginging: false,
+        rules: {
+          name: [{
+            required: true,
+            message: '用户名不能为空',
             trigger: 'blur'
-          },
-          {
+          }],
+          password: [{
             required: true,
             message: '密码名不能为空',
             trigger: 'blur'
-          }
-        ],
-        passwordCheck: [{
-            validator: validatePassCheck,
-            trigger: 'blur'
-          },
-          {
+          }],
+          passwordCheck: [{
             required: true,
             message: '密码名不能为空',
             trigger: 'blur'
-          }
-        ],
-        email: [{
+          }],
+          email: [{
             required: true,
-            message: '邮件不能为空',
+            message: '密码名不能为空',
             trigger: 'blur'
-          },
-          {
-            type: 'email',
-            message: 'email',
+          }]
+        },
+        resigsterRules: {
+          name: [{
+            required: true,
+            message: '用户名不能为空',
             trigger: 'blur'
-          }
-        ]
-      },
-      user: {
-        name: '',
-        password: ''
-      },
-      ruser: {
-        name: '',
-        password: '',
-        passwordCheck: ''
-      }
-    };
-  },
-  methods: {
-    gotoRegister: function () {
-      this.isLogin = !this.isLogin;
+          }],
+          password: [{
+              validator: validatePass,
+              trigger: 'blur'
+            },
+            {
+              required: true,
+              message: '密码名不能为空',
+              trigger: 'blur'
+            }
+          ],
+          passwordCheck: [{
+              validator: validatePassCheck,
+              trigger: 'blur'
+            },
+            {
+              required: true,
+              message: '密码名不能为空',
+              trigger: 'blur'
+            }
+          ],
+          email: [{
+              required: true,
+              message: '邮件不能为空',
+              trigger: 'blur'
+            },
+            {
+              type: 'email',
+              message: 'email',
+              trigger: 'blur'
+            }
+          ]
+        },
+        user: {
+          name: '',
+          password: ''
+        },
+        ruser: {
+          name: '',
+          password: '',
+          passwordCheck: ''
+        }
+      };
     },
-    login() {
-      this.loginging = true;
-      console.log(this.isLogin);
-      if (this.user.name === "123" && this.user.password === "123") {
-        this.$Message.success({
-          content: "登录成功"
-        })
+    methods: {
+      gotoRegister: function () {
+        this.isLogin = !this.isLogin;
+      },
+      login() {
+        this.loginging = true;
+        console.log(this.isLogin);
+        if (this.user.name === '123' && this.user.password === '123') {
+          this.$Message.success({
+            content: '登录成功'
+          })
 
+          setTimeout(() => {
+            this.$router.push('/manager');
+          }, 2000)
+        } else {
+          this.$Message.error({
+            content: '账户名或者密码错误'
+          })
+        }
         setTimeout(() => {
-          this.$router.push("/manager");
+          this.loginging = false
         }, 2000)
-      } else {
-        this.$Message.error({
-          content: "账户名或者密码错误"
-        })
       }
-      setTimeout(() => {
-        this.loginging = false
-      }, 2000)
     }
   }
-}
 
 </script>

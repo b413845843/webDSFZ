@@ -5,13 +5,13 @@ import ManagerLayout from '@/layout/managerLayout'
 Vue.use(Router)
 
 export default new Router({
-    routes: [{
-            path: '/',
-            component: HelloWorld
-        },
-        {
-            path: '/usermanager',
-            component: ManagerLayout
-        }
-    ]
+  routes: [{
+      path: '/',
+      component: HelloWorld
+    },
+    {
+      path: '/usermanager',
+      component: ManagerLayout
+    }
+  ]
 })

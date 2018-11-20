@@ -17,6 +17,10 @@ module.exports = {
     "eol-last": 0,
     "semi": 0,
     'indent': 'off',
+    "space-before-function-paren": [
+      0,
+      "never"
+    ],
   },
   parserOptions: {
     parser: 'babel-eslint'
