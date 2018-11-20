@@ -1,5 +1,9 @@
 <template>
-     <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']">
+     <Menu active-name="1-2" theme="dark" width="auto" :open-names="['1']">
+         <div class="layout-logo">
+            <img src="@/assets/DSLogo.png" class="logo"></img>
+                    
+        </div>
         <Submenu name="1">
             <template slot="title">
                 <Icon type="ios-navigate"></Icon>
@@ -25,6 +29,24 @@
         </Submenu>
     </Menu>
 </template>
+
+<style scoped>
+
+.logo{
+    height: 50px;
+    padding: 10px;
+}
+
+.layout-logo{
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 3px;
+    margin: 0 auto;
+    color: mediumblue
+}
+</style>
+
 
 <script>
 export default {

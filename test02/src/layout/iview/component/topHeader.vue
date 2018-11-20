@@ -1,57 +1,52 @@
 <template>
-    <Menu mode="horizontal" theme="dark" active-name="1" style="padding:0px 50px;">
-        <div class="layout-logo">
-            <img src="@/assets/DSLogo.png" class="logo"></img>
-            
-        </div>
-        <div class="layout-nav">
-            <MenuItem name="1">
-                <Icon type="ios-navigate"></Icon>
-                Item 1
-            </MenuItem>
-            <MenuItem name="2">
-                <Icon type="ios-keypad"></Icon>
-                Item 2
-            </MenuItem>
-            <MenuItem name="3">
-                <Icon type="ios-analytics"></Icon>
-                Item 3
-            </MenuItem>
-            <MenuItem name="4">
-                <Icon type="ios-paper"></Icon>
-                Item 4
-            </MenuItem>
-        </div>
-    </Menu>
+    <div>
+        <a @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"><Icon :type="icon" :size="size" /></a>
+    </div>
+        
 </template>
 
-<style scoped>
-.logo{
-    width: 30px;
-    height: 30px;
+<style scoped lang="less">
+.trans{
+  transition: transform .2s ease;
 }
-
-.layout-logo{
-    width: 100px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 3px;
-    float: left;
-    position: relative;
-    top: 15px;
-    left: 0px;
-    color: mediumblue
-}
-.layout-nav{
-    width: 420px;
-    margin: 0 auto;
-    margin-right: 20px;
+@size: 40px;
+.sider-trigger-a{
+  padding: 6px;
+  width: @size;
+  height: @size;
+  display: inline-block;
+  text-align: center;
+  color: #5c6b77;
+  margin-top: 12px;
+  i{
+    .trans;
+    vertical-align: top;
+  }
+  &.collapsed i{
+    transform: rotateZ(90deg);
+    .trans;
+  }
 }
 </style>
 
 
 <script>
 export default {
-
+    props:{
+        collapsed:Boolean,
+        icon: {
+            type: String,
+            default: 'ios-arrow-back'
+        },
+        size: {
+            type: Number,
+            default: 26
+        }
+    },
+    methods:{
+        handleChange(){
+            this.$emit('on-change', !this.collapsed)
+        }
+    }
 }
 </script>

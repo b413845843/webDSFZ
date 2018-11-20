@@ -327,7 +327,8 @@ export default {
                 this.imageSource = event.target.result
             }.bind(this)
             
-        },F_Open_dialog() { 
+        },
+        F_Open_dialog() { 
             document.getElementById("btn_file").click(); 
         }
     },
