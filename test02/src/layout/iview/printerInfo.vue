@@ -30,7 +30,6 @@
       <Page :total="tableData.length" size="small" show-elevator show-sizer style="margin-top:10px" />
     </Row>
 
-
     <Modal v-model="deleteModel" title="删除" ref="deleteModel">
       <div>准备删除</div>
     </Modal>
@@ -82,34 +81,28 @@
 
 </style>
 
-
 <script>
   import {
     deepClone
-  } from "@/tools/copy";
+  } from '@/tools/copy';
   import {
     getPrinterList,
     getPrinterInfo,
     addPrinter,
     editPrinter,
-    deletePrinter,
     getVersion,
-    getConfig,
-    postPrint
-  } from "@/api/info";
+    getConfig
+  } from '@/api/info';
   import {
-    Node,
-    parseNode,
     parseNode2
-  } from "@/tools/parseJsonToNode";
-  import nodeView from "@/layout/iview/component/nodeView.vue";
+  } from '@/tools/parseJsonToNode';
 
-  const status = ["Ready", "Busy", "Warn", "Error", "None", "Dead"];
+  const status = ['Ready', 'Busy', 'Warn', 'Error', 'None', 'Dead'];
 
-  function defaultInfo() {
+  function defaultInfo () {
     return {
       Number: Math.floor(Math.random() * 20000 + 1),
-      Model: "DL-210",
+      Model: 'DL-210',
       Status: status[Math.floor(Math.random() * 4 + 1)],
       Received: 1234,
       Jobs: Math.floor(Math.random() * 255 + 1),
@@ -118,21 +111,18 @@
   }
 
   export default {
-    components: {
-      "node-view": nodeView
-    },
-    data() {
+    data () {
       return {
         tableCols: [{
-            type: "selection",
+            type: 'selection',
             width: 60,
-            align: "center"
+            align: 'center'
           },
           {
-            type: "expand",
+            type: 'expand',
             width: 50,
             render: (h, params) => {
-              return h("more-info-row", {
+              return h('more-info-row', {
                 props: {
                   row: params.row
                 }
@@ -140,11 +130,11 @@
             }
           },
           {
-            title: "设备编码",
-            key: "Number",
+            title: '设备编码',
+            key: 'Number',
             render: (h, params) => {
               return h(
-                "a", {
+                'a', {
                   on: {
                     click: () => {
                       console.log(`请求info 0 ${params.row.Number}`);
@@ -158,11 +148,11 @@
             }
           },
           {
-            title: "型号",
-            key: "Model",
+            title: '型号',
+            key: 'Model',
             render: (h, params) => {
               return h(
-                "a", {
+                'a', {
                   on: {
                     click: () => {
                       console.log(`请求info 1 ${params.row.Number}`);
@@ -176,14 +166,14 @@
             }
           },
           {
-            title: "网络/状态",
-            key: "Status",
+            title: '网络/状态',
+            key: 'Status',
             render: (h, params) => {
               // const color = params.row.Status === 'Ready'?'success':'error'
               // const type = params.row.Net === 'Online'?'Ready':'Error'
 
               return h(
-                "dot-link", {
+                'dot-link', {
                   props: {
                     click: () => {
                       console.log(`请求info 1 ${params.row.Number}`);
@@ -193,32 +183,31 @@
                     text: params.row.Status,
                     type: params.row.Net
                   }
-                },
-                "::"
+                }
               );
             }
           },
           {
-            title: "接收缓存",
-            key: "Received"
+            title: '接收缓存',
+            key: 'Received'
           },
           {
-            title: "作业数",
-            key: "Jobs"
+            title: '作业数',
+            key: 'Jobs'
           },
           {
-            title: "心跳数",
-            key: "Ticks"
+            title: '心跳数',
+            key: 'Ticks'
           },
           {
-            title: "操作",
+            title: '操作',
             render: function (h, params) {
-              return h("div", [
+              return h('div', [
                 h(
-                  "a", {
+                  'a', {
                     style: {
-                      marginRight: "20px",
-                      color: "#000"
+                      marginRight: '20px',
+                      color: '#000'
                     },
                     on: {
                       click: () => {
@@ -231,19 +220,19 @@
                     }
                   },
                   [
-                    h("Icon", {
+                    h('Icon', {
                       props: {
-                        type: "md-print",
+                        type: 'md-print',
                         size: 16
                       }
                     })
                   ]
                 ),
                 h(
-                  "a", {
+                  'a', {
                     style: {
-                      marginRight: "20px",
-                      color: "#000"
+                      marginRight: '20px',
+                      color: '#000'
                       // border:0,
                       // backgroundColor: 'transparent'
                     },
@@ -253,14 +242,14 @@
                           `index ${params.index} number ${params.row.Number}`
                         );
                         this.configNumber = params.row.Number;
-                        this.fetchConfig("WIFI");
+                        this.fetchConfig('WIFI');
                       }
                     }
                   },
                   [
-                    h("Icon", {
+                    h('Icon', {
                       props: {
-                        type: "md-hammer",
+                        type: 'md-hammer',
                         size: 16
                       }
                     })
@@ -273,39 +262,39 @@
         infoRules: {
           Number: [{
             required: true,
-            message: "s",
-            trigger: "blur"
+            message: 's',
+            trigger: 'blur'
           }],
           Model: [{
             required: true,
-            message: "s",
-            trigger: "blur"
+            message: 's',
+            trigger: 'blur'
           }],
           Status: [{
               required: true,
-              message: "s",
-              trigger: "blur"
+              message: 's',
+              trigger: 'blur'
             },
             {
-              type: "enum",
-              enum: ["Ready", "Busy", "None"],
-              trigger: "blur"
+              type: 'enum',
+              enum: ['Ready', 'Busy', 'None'],
+              trigger: 'blur'
             }
           ],
           Received: [{
             required: true,
-            message: "s",
-            trigger: "blur"
+            message: 's',
+            trigger: 'blur'
           }],
           Jobs: [{
             required: true,
-            message: "s",
-            trigger: "blur"
+            message: 's',
+            trigger: 'blur'
           }],
           Ticks: [{
             required: true,
-            message: "s",
-            trigger: "blur"
+            message: 's',
+            trigger: 'blur'
           }]
         },
         tableData: [],
@@ -314,28 +303,28 @@
         editeModel: false,
         addModel: false,
         newInfo: {
-          Number: "",
-          Model: "",
-          Status: "",
+          Number: '',
+          Model: '',
+          Status: '',
           Received: 0,
           Jobs: 0,
           Ticks: 0
         },
-        type: "",
+        type: '',
         status: status,
         version: null,
         versonFetching: false,
         showConfig: false,
         isGettingConfig: false,
         configJson: {},
-        configNumber: "",
+        configNumber: '',
         showPrint: false,
         isGettingPrinting: false,
         filterValue: []
       };
     },
 
-    mounted() {
+    mounted () {
       this.$Message.config({
         top: 100,
         duration: 2
@@ -345,20 +334,20 @@
     },
 
     methods: {
-      configAction(action, data) {
+      configAction (action, data) {
         console.info(JSON.stringify(data));
         this.showConfig = false;
       },
-      printAction(action) {
-        if (action == "cancel") {
+      printAction (action) {
+        if (action === 'cancel') {
           this.showPrint = false;
         }
       },
 
-      async fetchVersion() {
+      async fetchVersion () {
         this.versonFetching = true;
         this.version = null;
-        let res = await getVersion("json")
+        await getVersion('json')
           .then(res => {
             this.version = res.data;
             console.log(res.data);
@@ -369,7 +358,7 @@
 
         this.versonFetching = false;
       },
-      async fetchConfig(type) {
+      async fetchConfig (type) {
         this.showConfig = true;
         this.isGettingConfig = true;
         this.configJson = null;
@@ -384,16 +373,16 @@
             });
           });
         // if (type === 'DEVICE') this.configJson = JSON.parse('{"Edit Items":{"DevID":"020101d801eeffff","Blue Tooth":{"Model":{"DataType":"string","NodeVal":"Seed BTPRINTER","Length":17,"path":"Blue Tooth.Model"},"Password":{"DataType":"string","NodeVal":"0000","Length":5,"path":"Blue Tooth.Password"}},"Card Type":{"DataType":"value","NodeVal":0,"Min":0,"Max":255,"path":"Card Type"},"Emulation":{"DataType":"list","NodeVal":"3","ListVal":"DS_EMUL;EV_EMUL;STAR_EMUL;DSBMP_EMUL","path":"Emulation"},"Erase Temp":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Erase Temp"},"Ethernet":{"Gateway":{"DataType":"data","NodeVal":"c0a80001","Length":4,"Tag":"Tag_IP","path":"Ethernet.Gateway"},"IP Address":{"DataType":"data","NodeVal":"c0a80007","Length":4,"Tag":"Tag_IP","path":"Ethernet.IP Address"},"Port":{"DataType":"value","NodeVal":9100,"Min":0,"Max":65535,"path":"Ethernet.Port"}},"Input Card":{"DataType":"list","NodeVal":"2","ListVal":"Card Box;Manual;Auto","path":"Input Card"},"Output Card":{"DataType":"list","NodeVal":"0","ListVal":"Card Box;Manual;Back;None","path":"Output Card"},"Print Speed":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Print Speed"},"Print Temp":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Print Temp"},"USB_ID":{"DataType":"list","NodeVal":"0","ListVal":"ON;OFF;","path":"USB_ID"},"WiFi Cfg":{"DHCP":{"DataType":"list","NodeVal":"1","ListVal":"OFF;ON","path":"WiFi Cfg.DHCP"},"DNS":{"DataType":"data","NodeVal":"c0a80064","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.DNS"},"Gateway":{"DataType":"data","NodeVal":"c0a800fe","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.Gateway"},"IP Address":{"DataType":"data","NodeVal":"c0a80001","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.IP Address"},"Password":{"DataType":"string","NodeVal":"dascom","Length":9,"path":"WiFi Cfg.Password"},"SSID":{"DataType":"string","NodeVal":"SeedWIFIPrinter","Length":24,"path":"WiFi Cfg.SSID"},"Subnet Mask":{"DataType":"data","NodeVal":"ffffff00","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.Subnet Mask"},"WiFi Enable":{"DataType":"list","NodeVal":"0","ListVal":"OFF;ON","path":"WiFi Cfg.WiFi Enable"},"WiFi Mode":{"DataType":"list","NodeVal":"1","ListVal":"CLIENT;SERVER","path":"WiFi Cfg.WiFi Mode"}}},"Cfg Packet":{"NodeVal":"AgEB2AHu//9EUjEwRURTAAAAAAAAAAAAAbgh3gEBAAYCAQAAAAADAQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAQEDAAAABAEAAAAAAAAAAAAAAAAAAQAKAQBTZWVkV0lGSVByaW50ZXIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoKCgoKCsCoAAH///8AwKgA/sCoAGTAqAAKZGFzY29tAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFTZWVkIEJUUFJJTlRFUgAAADAwMDAAAAAAAAAAAQAAAMCoAAEXAMCoAAeMI8CoAAEDAMIBAAAA////AFAAAAAAAAAAAwAAAAT/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAIACgoKCgoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","path":"Cfg Packet"}}')
-        console.log("stop loading");
+        console.log('stop loading');
         setTimeout(() => {
           this.isGettingConfig = false;
         }, 50);
       },
-      async fetchData() {
+      async fetchData () {
         this.tableLoading = true;
         this.tableData = [];
-        console.log("start fetch data");
-        let res = await getPrinterList()
+        console.log('start fetch data');
+        await getPrinterList()
           .then(res => {
             this.tableData = res.data;
           })
@@ -407,8 +396,8 @@
 
         this.tableLoading = false;
       },
-      async fetchInfo(number, type) {
-        let res = await getPrinterInfo(number, type)
+      async fetchInfo (number, type) {
+        await getPrinterInfo(number, type)
           .then(res => {
             let nodes = parseNode2(res.data);
 
@@ -436,35 +425,35 @@
 
         this.tableLoading = false
       },
-      showDeleteModal(row) {
+      showDeleteModal (row) {
         this.deleteModel = true
       },
-      showAddModal() {
+      showAddModal () {
         this.newInfo = defaultInfo()
-        this.type = "add"
+        this.type = 'add'
         this.addModel = true
       },
-      showEditModal(row) {
+      showEditModal (row) {
         this.newInfo = deepClone(row)
-        this.type = "edit"
+        this.type = 'edit'
         this.addModel = true
       },
-      handleSubmit(name) {
+      handleSubmit (name) {
         this.$refs[name].validate(
           async function (valid) {
             if (valid) {
               this.$Message.info({
-                content: "验证成功"
+                content: '验证成功'
               })
 
               let res
-              if ("add" == this.type) {
+              if (this.type === 'add') {
                 res = await addPrinter(this.newInfo);
               } else {
                 res = await editPrinter(this.newInfo);
               }
-              let message = this.type == "add" ? "添加" : "编辑";
-              if (res.data == undefined) {
+              let message = this.type === 'add' ? '添加' : '编辑';
+              if (res.data === undefined) {
                 this.$Message.error({
                   content: `错误 : ${err}`
                 })
@@ -479,16 +468,16 @@
               this.addModel = false
             } else {
               this.$Message.error({
-                content: "验证失败"
+                content: '验证失败'
               })
             }
           }.bind(this)
         )
       },
-      handleReset(name) {
+      handleReset (name) {
         this.$refs[name].resetFields();
       },
-      filterChange(value) {
+      filterChange (value) {
         console.log(value)
       }
     }
