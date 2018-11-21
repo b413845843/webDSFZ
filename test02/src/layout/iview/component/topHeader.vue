@@ -28,7 +28,7 @@
     }
 
     &.collapsed i {
-      transform: rotateZ(90deg);
+      transform: rotateZ(180deg);
       .trans;
     }
   }

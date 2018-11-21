@@ -2,17 +2,17 @@
   <div>
     <Row>
       <Col span="8">
-      <div v-for="node of datas">
+      <div v-for="(node,index) of datas" :key="index">
         <node-view :node='node'> </node-view>
       </div>
       </Col>
       <Col span="8">
-      <div v-for="node of detail">
+      <div v-for="(node,index) of detail" :key="index">
         <node-view :node='node'> </node-view>
       </div>
       </Col>
       <Col span="8">
-      <div v-for="node of states">
+      <div v-for="(node,index) of states" :key="index">
         <node-view :node='node'> </node-view>
       </div>
       </Col>
@@ -31,7 +31,7 @@
   } from '@/api/info'
   import {
     parseNode2
-  } from "@/tools/parseJsonToNode";
+  } from '@/tools/parseJsonToNode';
 
   export default {
     props: {
@@ -66,7 +66,6 @@
         setTimeout(() => {
           this.isLoading = false
         }, 200);
-
       }
     },
     data() {

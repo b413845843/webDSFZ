@@ -47,12 +47,9 @@
     margin: 0 auto;
     color: mediumblue
   }
-
 </style>
 
-
 <script>
-  export default {
-  }
-
+export default {
+}
 </script>

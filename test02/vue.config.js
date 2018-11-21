@@ -5,6 +5,7 @@ function resolve(dir) {
 }
 
 module.exports = {
+  baseUrl: '/vue',
   configureWebpack: config => {
     config.resolve = {
       extensions: ['.js', '.vue', '.json', '.css'],

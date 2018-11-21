@@ -8,7 +8,7 @@
       <Header style="padding:0;width:100%;z-index:10000;backgroundColor:#FFF" class="layout">
         <topHeader :collapsed="isCollapsed" @on-change="handleCollpasedChange"></topHeader>
       </Header>
-      <Layout :style="{padding:'20px'}">
+      <Layout style="padding:20px;overflow:auto">
         <Content>
           <router-view></router-view>
         </Content>
