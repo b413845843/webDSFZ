@@ -3,6 +3,7 @@
 import Vue from 'vue/dist/vue.js'
 import App from './App'
 import iviewRouter from './router/iviewIndex.js'
+import i18n from '@/locale'
 
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -33,6 +34,10 @@ iviewRouter.beforeEach((to, from, next) => {
   next()
 })
 
+Vue.use(iView, {
+  i18n: (key, value) => i18n.t(key, value)
+})
+
 iviewRouter.afterEach(() => {
   NProgress.done()
 })
@@ -40,6 +45,7 @@ iviewRouter.afterEach(() => {
 export default new Vue({
   el: '#app',
   router: iviewRouter,
+  i18n,
   components: {
     App
   },

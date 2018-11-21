@@ -11,9 +11,9 @@
     <div v-if="nodes!=null">
       <Collapse simple accordion v-model="collapse">
         <Panel v-for="(item,index) of nodes.items" :key='item.name' :name="String(index)">
-          {{item.name}}
+          {{$t(item.name)}}
           <Form v-if="item.items" :label-width="120" slot="content">
-            <FormItem v-for="subItem of item.items" :key='subItem.name' :label="subItem.name" class="leaf">
+            <FormItem v-for="subItem of item.items" :key='subItem.name' :label="$t(subItem.name)" class="leaf">
               <Input v-if="subItem.dataType == 'string'" v-model="subItem.value" placeholder=""></Input>
               <Input v-else-if="subItem.dataType == 'value'" v-model="subItem.value" placeholder=""></Input>
               <Input v-else-if="subItem.dataType == 'data'" v-model="subItem.value" placeholder=""></Input>
