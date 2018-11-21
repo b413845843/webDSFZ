@@ -68,9 +68,9 @@
       </Form>
     </Modal>
 
-    <config-view :show="showConfig" :isLoading="isGettingConfig" @action="configAction" @get-config="fetchConfig" :json="configJson"></config-view>
+    <config-view :show="showConfig" :isLoading="isConfigLoading" @action="configAction" @get-config="fetchConfig" :json="configJson" :number="configNumber"></config-view>
 
-    <print-view :show="showPrint" @action="printAction" :number=configNumber></print-view>
+    <print-view :show="showPrint" @action="printAction" :number="configNumber"></print-view>
   </Card>
 </template>
 
@@ -315,7 +315,7 @@
         version: null,
         versonFetching: false,
         showConfig: false,
-        isGettingConfig: false,
+        isConfigLoading: false,
         configJson: {},
         configNumber: '',
         showPrint: false,
@@ -334,9 +334,12 @@
     },
 
     methods: {
-      configAction (action, data) {
-        console.info(JSON.stringify(data));
-        this.showConfig = false;
+      configAction (action,status) {
+        if (action === 'cancel') {
+          this.showConfig = false;
+        }else{
+          this.isConfigLoading = status
+        }
       },
       printAction (action) {
         if (action === 'cancel') {
@@ -360,7 +363,7 @@
       },
       async fetchConfig (type) {
         this.showConfig = true;
-        this.isGettingConfig = true;
+        this.isConfigLoading = true;
         this.configJson = null;
         await getConfig(this.configNumber, type)
           .then(res => {
@@ -375,7 +378,7 @@
         // if (type === 'DEVICE') this.configJson = JSON.parse('{"Edit Items":{"DevID":"020101d801eeffff","Blue Tooth":{"Model":{"DataType":"string","NodeVal":"Seed BTPRINTER","Length":17,"path":"Blue Tooth.Model"},"Password":{"DataType":"string","NodeVal":"0000","Length":5,"path":"Blue Tooth.Password"}},"Card Type":{"DataType":"value","NodeVal":0,"Min":0,"Max":255,"path":"Card Type"},"Emulation":{"DataType":"list","NodeVal":"3","ListVal":"DS_EMUL;EV_EMUL;STAR_EMUL;DSBMP_EMUL","path":"Emulation"},"Erase Temp":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Erase Temp"},"Ethernet":{"Gateway":{"DataType":"data","NodeVal":"c0a80001","Length":4,"Tag":"Tag_IP","path":"Ethernet.Gateway"},"IP Address":{"DataType":"data","NodeVal":"c0a80007","Length":4,"Tag":"Tag_IP","path":"Ethernet.IP Address"},"Port":{"DataType":"value","NodeVal":9100,"Min":0,"Max":65535,"path":"Ethernet.Port"}},"Input Card":{"DataType":"list","NodeVal":"2","ListVal":"Card Box;Manual;Auto","path":"Input Card"},"Output Card":{"DataType":"list","NodeVal":"0","ListVal":"Card Box;Manual;Back;None","path":"Output Card"},"Print Speed":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Print Speed"},"Print Temp":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Print Temp"},"USB_ID":{"DataType":"list","NodeVal":"0","ListVal":"ON;OFF;","path":"USB_ID"},"WiFi Cfg":{"DHCP":{"DataType":"list","NodeVal":"1","ListVal":"OFF;ON","path":"WiFi Cfg.DHCP"},"DNS":{"DataType":"data","NodeVal":"c0a80064","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.DNS"},"Gateway":{"DataType":"data","NodeVal":"c0a800fe","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.Gateway"},"IP Address":{"DataType":"data","NodeVal":"c0a80001","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.IP Address"},"Password":{"DataType":"string","NodeVal":"dascom","Length":9,"path":"WiFi Cfg.Password"},"SSID":{"DataType":"string","NodeVal":"SeedWIFIPrinter","Length":24,"path":"WiFi Cfg.SSID"},"Subnet Mask":{"DataType":"data","NodeVal":"ffffff00","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.Subnet Mask"},"WiFi Enable":{"DataType":"list","NodeVal":"0","ListVal":"OFF;ON","path":"WiFi Cfg.WiFi Enable"},"WiFi Mode":{"DataType":"list","NodeVal":"1","ListVal":"CLIENT;SERVER","path":"WiFi Cfg.WiFi Mode"}}},"Cfg Packet":{"NodeVal":"AgEB2AHu//9EUjEwRURTAAAAAAAAAAAAAbgh3gEBAAYCAQAAAAADAQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAQEDAAAABAEAAAAAAAAAAAAAAAAAAQAKAQBTZWVkV0lGSVByaW50ZXIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoKCgoKCsCoAAH///8AwKgA/sCoAGTAqAAKZGFzY29tAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFTZWVkIEJUUFJJTlRFUgAAADAwMDAAAAAAAAAAAQAAAMCoAAEXAMCoAAeMI8CoAAEDAMIBAAAA////AFAAAAAAAAAAAwAAAAT/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAIACgoKCgoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","path":"Cfg Packet"}}')
         console.log('stop loading');
         setTimeout(() => {
-          this.isGettingConfig = false;
+          this.isConfigLoading = false;
         }, 50);
       },
       async fetchData () {

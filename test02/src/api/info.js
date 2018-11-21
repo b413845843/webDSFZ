@@ -6,14 +6,14 @@ const pDeviceList = pBaseUrl + '/DeviceList'
 const pDeviceInfo = pBaseUrl + '/DeviceInfo'
 const pVersion = pBaseUrl + '/Version'
 const pConfig = pBaseUrl + '/DeviceCfg'
-const pPrint = pBaseUrl + '/SubmitJob'
+const pSubmitJob = pBaseUrl + '/SubmitJob'
 
 /* eslint-disable */
 const dDeviceList = 'http://localhost:3000/printerInfo'
 
-export function postPrint(data) {
+export function submitJob(data) {
   return service({
-    url: `${pPrint}`,
+    url: `${pSubmitJob}`,
     method: 'post',
     data: JSON.stringify(data),
     headers: {

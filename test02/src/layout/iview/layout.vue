@@ -6,7 +6,9 @@
 
     <Layout>
       <Header style="padding:0;width:100%;z-index:10000;backgroundColor:#FFF" class="layout">
-        <topHeader :collapsed="isCollapsed" @on-change="handleCollpasedChange"></topHeader>
+        <topHeader :collapsed="isCollapsed" @on-change="handleCollpasedChange" :icon="icon">
+          <user></user>
+        </topHeader>
       </Header>
       <Layout style="padding:20px;overflow:auto">
         <Content>
@@ -62,17 +64,20 @@
 </style>
 
 <script>
-  import topHeader from '@/layout/iview/component/topHeader'
+  import topHeader from '@/layout/iview/component/topHeader/topHeader'
   import leftNav from '@/layout/iview/component/leftNav'
+  import User from './component/user'
   export default {
     components: {
       topHeader,
-      leftNav
+      leftNav,
+      User
     },
     data() {
       return {
         transitionName: 'slide-left',
-        isCollapsed: false
+        isCollapsed: false,
+        icon: 'md-menu'
       }
     },
     beforeRouteUpdate(to, from, next) {

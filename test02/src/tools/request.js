@@ -17,7 +17,7 @@ service.interceptors.response.use(
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
-          error.message = '请求无效'
+          error.message = `请求无效`
           break
         case 401:
           error.message = '未授权，请重新登录'

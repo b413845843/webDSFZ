@@ -160,7 +160,7 @@
     Base64
   } from 'js-base64';
   import {
-    postPrint
+    submitJob
   } from '@/api/info'
 
   export default {
@@ -242,7 +242,7 @@
         this.$emit('action', 'ok')
         this.showPrint = true
 
-        await postPrint(this.sendData).then(res => {
+        await submitJob(this.sendData).then(res => {
           this.msg = res.data
         }).catch(err => {
           console.log(err);

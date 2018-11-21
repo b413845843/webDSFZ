@@ -1,41 +1,16 @@
 <template>
-  <div>
+  <div class="header">
     <a @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']">
-      <Icon :type="icon" :size="size" /></a>
+      <Icon :type="icon" :size="size" />
+    </a>
+    <div class="custom-content-con">
+      <slot></slot>
+    </div>
   </div>
-
 </template>
 
-<style scoped lang="less">
-  .trans {
-    transition: transform .2s ease;
-  }
-
-  @size: 40px;
-
-  .sider-trigger-a {
-    padding: 6px;
-    width: @size;
-    height: @size;
-    display: inline-block;
-    text-align: center;
-    color: #5c6b77;
-    margin-top: 12px;
-
-    i {
-      .trans;
-      vertical-align: top;
-    }
-
-    &.collapsed i {
-      transform: rotateZ(180deg);
-      .trans;
-    }
-  }
-
-</style>
-
 <script>
+import './topHeader.less'
   export default {
     props: {
       collapsed: Boolean,
