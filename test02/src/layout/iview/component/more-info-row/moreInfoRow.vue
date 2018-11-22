@@ -21,10 +21,6 @@
   </div>
 </template>
 
-<style scoped>
-
-</style>
-
 <script>
   import {
     getPrinterInfo
@@ -34,6 +30,7 @@
   } from '@/tools/parseJsonToNode';
 
   export default {
+    name: 'MoreInfoRow',
     props: {
       number: String,
       row: Object

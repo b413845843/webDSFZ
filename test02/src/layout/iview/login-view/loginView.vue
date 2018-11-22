@@ -42,44 +42,10 @@
   </div>
 </template>
 
-<style scoped>
-  .container {
-    background-color: rgb(173, 216, 233);
-    width: 100%;
-    height: 1024px;
-    padding: 200px 0px;
-  }
-
-  .card {
-    margin: 0 auto;
-    width: 500px;
-  }
-
-  .slide-fade-enter-active {
-    transition: all 0.3s ease;
-  }
-
-  .slide-fade-leave-active {
-    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-  }
-
-  .slide-fade-leave-to
-
-  /* .slide-fade-leave-active for below version 2.1.8 */
-    {
-    transform: translateX(50px);
-    opacity: 0;
-  }
-
-  .slide-fade-enter {
-    transform: translateX(-50px);
-    opacity: 0;
-  }
-
-</style>
 
 <script>
   export default {
+    name: 'LoginView',
     data() {
       const validatePass = function (rule, value, callback) {
         if (value === '') {

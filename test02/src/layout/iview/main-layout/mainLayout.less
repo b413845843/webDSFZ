@@ -1,0 +1,38 @@
+.child-view {
+  position: absolute;
+  clear: both;
+  transition: all .5s cubic-bezier(.55, 0, .1, 1);
+}
+
+.slide-left-enter,
+.slide-right-leave-active {
+  opacity: 0;
+  -webkit-transform: translate(30px, 0);
+  transform: translate(30px, 0);
+}
+
+.slide-left-leave-active,
+.slide-right-enter {
+  opacity: 0;
+  -webkit-transform: translate(-30px, 0);
+  transform: translate(-30px, 0);
+}
+
+.menu-item i {
+  transform: translateX(0px);
+  transition: font-size .2s ease, transform .2s ease;
+  vertical-align: middle;
+  font-size: 16px;
+}
+
+.collapsed-menu span {
+  width: 0px;
+  transition: width .2s ease;
+}
+
+.collapsed-menu i {
+  transform: translateX(5px);
+  transition: font-size .2s ease .2s, transform .2s ease .2s;
+  vertical-align: middle;
+  font-size: 22px;
+}

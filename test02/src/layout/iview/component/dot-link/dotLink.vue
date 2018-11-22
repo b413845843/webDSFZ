@@ -9,18 +9,9 @@
 </template>
 
 <script>
+import './dotLink.less';
   export default {
-    name: 'dotLink',
+    name: 'DotLink',
     props: ['click', 'text', 'type']
   }
 </script>
-
-<style lang="less" scoped>
-  @import './dotLink.less';
-
-  * {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-</style>

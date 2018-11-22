@@ -33,23 +33,9 @@
   </Menu>
 </template>
 
-<style scoped>
-  .logo {
-    height: 50px;
-    padding: 10px;
-  }
-
-  .layout-logo {
-    width: 100px;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 3px;
-    margin: 0 auto;
-    color: mediumblue
-  }
-</style>
-
 <script>
+import './leftNav.less'
 export default {
+  name: 'LeftNav'
 }
 </script>

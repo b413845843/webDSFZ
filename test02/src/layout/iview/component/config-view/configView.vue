@@ -34,38 +34,11 @@
   </Modal>
 </template>
 
-<style scoped>
-  .col {
-    height: 100%;
-  }
-
-  .btn {
-    width: 100%;
-    height: 100%;
-    display: inline-block;
-    text-align: center
-  }
-
-  .leaf {
-    padding-left: 0px;
-    margin-bottom: 5px;
-  }
-
-  .leafTitle {
-    color: rgb(107, 105, 105)
-  }
-
-  .leafContent {
-    color: dodgerblue;
-    font-weight: bold
-  }
-
-</style>
-
 <script>
+  import './configView.less'
   import {
-      submitJob
-    } from '@/api/info'
+    submitJob
+  } from '@/api/info'
   /* eslint-disable */
   String.prototype.StrCut2Arr = function (n) {
     var str = this;
@@ -88,6 +61,7 @@
   }
 
   export default {
+    name: 'ConfigView',
     props: {
       json: Object,
       'show': Boolean,
@@ -96,7 +70,7 @@
     },
     methods: {
       async actionOK() {
-        this.$emit('action', 'ok',true)
+        this.$emit('action', 'ok', true)
         console.info(this.nodes);
         let datas = '';
 
@@ -104,47 +78,48 @@
           this.$Message.error({
             content: '数据为空,不能设置'
           })
+          this.$emit('action', 'ok', false)
           return
         }
-        datas+=`Cfg Packet=${this.nodes['Cfg Packet']};DevID=${this.nodes['DevID']};`
+        datas += `Cfg Packet=${this.nodes['Cfg Packet']};DevID=${this.nodes['DevID']};`
         this.nodes.items.forEach(node => {
-          
+
           if (node.type === 'node') {
             let nodeName = node.name
             for (let index = 0; index < node.items.length; index++) {
               const subNode = node.items[index];
-              const name = nodeName === 'Others'? subNode.name : nodeName + '.' +subNode.name
+              const name = nodeName === 'Others' ? subNode.name : nodeName + '.' + subNode.name
               const value = subNode.value;
               //如果是IP等格式
               if (subNode.dataType === 'data') {
                 value = ''
                 subNode.value.split('.').forEach(e => {
-                  let num = parseInt(e,10).toString(16)
-                  num = PrefixInteger(num,2)
-                  value+=num
+                  let num = parseInt(e, 10).toString(16)
+                  num = PrefixInteger(num, 2)
+                  value += num
                 })
               }
-              datas+=`${name}=${value};`
-            };   
-          }else{
+              datas += `${name}=${value};`
+            };
+          } else {
             const value = node.value;
             //如果是IP等格式
             if (node.dataType === 'data') {
               value = ''
               node.value.split('.').forEach(e => {
-                  let num = parseInt(e,10).toString(16)
-                  num = PrefixInteger(num,2)
-                  value+=num
-                })
+                let num = parseInt(e, 10).toString(16)
+                num = PrefixInteger(num, 2)
+                value += num
+              })
             }
-             datas+=`${node.name}=${value}`;
+            datas += `${node.name}=${value}`;
           }
         });
-        
-        let sendData={
+
+        let sendData = {
           dataFmt: 'text',
           datas: datas,
-          devType: this.wod ?'wifi':'device',
+          devType: this.wod ? 'wifi' : 'device',
           encodeType: 'string',
           imgH: -1,
           imgH: -1,
@@ -165,8 +140,8 @@
             content: `设置失败,错误:${err}`
           });
         })
-        
-        this.$emit('action', 'ok',false)
+
+        this.$emit('action', 'ok', false)
       },
       actionCancel() {
         this.$emit('action', 'cancel')

@@ -12,6 +12,7 @@
 <script>
 import './topHeader.less'
   export default {
+    name: 'TopHeader',
     props: {
       collapsed: Boolean,
       icon: {

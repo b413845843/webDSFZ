@@ -123,39 +123,10 @@
   </Modal>
 </template>
 
-<style scoped>
-  .col {
-    height: 100%;
-  }
 
-  .btn {
-    width: 100%;
-    height: 100%;
-    display: inline-block;
-    text-align: center
-  }
-
-  .leaf {
-    padding-left: 0px;
-    margin-bottom: 5px;
-  }
-
-  .leafTitle {
-    color: rgb(107, 105, 105)
-  }
-
-  .leafContent {
-    color: dodgerblue;
-    font-weight: bold
-  }
-
-  .formitemMargin {
-    margin-bottom: 0px;
-  }
-
-</style>
 
 <script>
+  import './printView.less'
   import {
     Base64
   } from 'js-base64';
@@ -164,6 +135,7 @@
   } from '@/api/info'
 
   export default {
+    name: 'PrintView',
     props: {
       'json': Object,
       'show': Boolean,

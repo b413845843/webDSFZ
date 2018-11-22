@@ -13,11 +13,11 @@ import 'iview/dist/styles/iview.css'
 
 import './index.less'
 
-import dotLink from '@/layout/iview/component/dotLink/dotLink'
-import nodeView from '@/layout/iview/component/nodeView'
-import configView from '@/layout/iview/component/configView'
-import printView from '@/layout/iview/component/printView'
-import moreInfoRow from '@/layout/iview/component/moreInfoRow'
+import dotLink from '@/layout/iview/component/dot-link'
+import nodeView from '@/layout/iview/component/node-view'
+import configView from '@/layout/iview/component/config-view'
+import printView from '@/layout/iview/component/print-view'
+import moreInfoRow from '@/layout/iview/component/more-info-row'
 
 Vue.config.productionTip = false
 
@@ -29,25 +29,25 @@ Vue.component('print-view', printView)
 Vue.component('more-info-row', moreInfoRow)
 
 iviewRouter.beforeEach((to, from, next) => {
-  NProgress.start()
-  window.document.title = to.meta.title
-  next()
+    NProgress.start()
+    window.document.title = to.meta.title
+    next()
 })
 
 Vue.use(iView, {
-  i18n: (key, value) => i18n.t(key, value)
+    i18n: (key, value) => i18n.t(key, value)
 })
 
 iviewRouter.afterEach(() => {
-  NProgress.done()
+    NProgress.done()
 })
 
 export default new Vue({
-  el: '#app',
-  router: iviewRouter,
-  i18n,
-  components: {
-    App
-  },
-  template: '<App/>'
+    el: '#app',
+    router: iviewRouter,
+    i18n,
+    components: {
+        App
+    },
+    template: '<App/>'
 })

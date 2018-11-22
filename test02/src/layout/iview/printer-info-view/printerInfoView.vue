@@ -2,7 +2,8 @@
   <Card id="printerInfo">
     <Row style="padding-bottom:10px">
       <Button type="info" @click="fetchData">
-        <Icon type="md-refresh" size=16 /> 刷新列表</Button>
+        <Icon type="md-refresh" size=16 /> 刷新列表
+      </Button>
 
       <Poptip trigger="hover" placement="left" @on-popper-show="fetchVersion" style="float:right;margin-right:10px;">
 
@@ -68,20 +69,15 @@
       </Form>
     </Modal>
 
-    <config-view :show="showConfig" :isLoading="isConfigLoading" @action="configAction" @get-config="fetchConfig" :json="configJson" :number="configNumber"></config-view>
+    <config-view :show="showConfig" :isLoading="isConfigLoading" @action="configAction" @get-config="fetchConfig" :json="configJson"
+      :number="configNumber"></config-view>
 
     <print-view :show="showPrint" @action="printAction" :number="configNumber"></print-view>
   </Card>
 </template>
 
-<style scoped>
-  .versionSpan {
-    float: right;
-  }
-
-</style>
-
 <script>
+  import './printerInfoView.less'
   import {
     deepClone
   } from '@/tools/copy';
@@ -99,7 +95,7 @@
 
   const status = ['Ready', 'Busy', 'Warn', 'Error', 'None', 'Dead'];
 
-  function defaultInfo () {
+  function defaultInfo() {
     return {
       Number: Math.floor(Math.random() * 20000 + 1),
       Model: 'DL-210',
@@ -111,7 +107,8 @@
   }
 
   export default {
-    data () {
+    name: 'PrinterInfoView',
+    data() {
       return {
         tableCols: [{
             type: 'selection',
@@ -324,7 +321,7 @@
       };
     },
 
-    mounted () {
+    mounted() {
       this.$Message.config({
         top: 100,
         duration: 2
@@ -334,20 +331,20 @@
     },
 
     methods: {
-      configAction (action,status) {
+      configAction(action, status) {
         if (action === 'cancel') {
           this.showConfig = false;
-        }else{
+        } else {
           this.isConfigLoading = status
         }
       },
-      printAction (action) {
+      printAction(action) {
         if (action === 'cancel') {
           this.showPrint = false;
         }
       },
 
-      async fetchVersion () {
+      async fetchVersion() {
         this.versonFetching = true;
         this.version = null;
         await getVersion('json')
@@ -361,7 +358,7 @@
 
         this.versonFetching = false;
       },
-      async fetchConfig (type) {
+      async fetchConfig(type) {
         this.showConfig = true;
         this.isConfigLoading = true;
         this.configJson = null;
@@ -375,13 +372,12 @@
               content: `错误 : ${err}`
             });
           });
-        // if (type === 'DEVICE') this.configJson = JSON.parse('{"Edit Items":{"DevID":"020101d801eeffff","Blue Tooth":{"Model":{"DataType":"string","NodeVal":"Seed BTPRINTER","Length":17,"path":"Blue Tooth.Model"},"Password":{"DataType":"string","NodeVal":"0000","Length":5,"path":"Blue Tooth.Password"}},"Card Type":{"DataType":"value","NodeVal":0,"Min":0,"Max":255,"path":"Card Type"},"Emulation":{"DataType":"list","NodeVal":"3","ListVal":"DS_EMUL;EV_EMUL;STAR_EMUL;DSBMP_EMUL","path":"Emulation"},"Erase Temp":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Erase Temp"},"Ethernet":{"Gateway":{"DataType":"data","NodeVal":"c0a80001","Length":4,"Tag":"Tag_IP","path":"Ethernet.Gateway"},"IP Address":{"DataType":"data","NodeVal":"c0a80007","Length":4,"Tag":"Tag_IP","path":"Ethernet.IP Address"},"Port":{"DataType":"value","NodeVal":9100,"Min":0,"Max":65535,"path":"Ethernet.Port"}},"Input Card":{"DataType":"list","NodeVal":"2","ListVal":"Card Box;Manual;Auto","path":"Input Card"},"Output Card":{"DataType":"list","NodeVal":"0","ListVal":"Card Box;Manual;Back;None","path":"Output Card"},"Print Speed":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Print Speed"},"Print Temp":{"DataType":"value","NodeVal":10,"Min":0,"Max":20,"path":"Print Temp"},"USB_ID":{"DataType":"list","NodeVal":"0","ListVal":"ON;OFF;","path":"USB_ID"},"WiFi Cfg":{"DHCP":{"DataType":"list","NodeVal":"1","ListVal":"OFF;ON","path":"WiFi Cfg.DHCP"},"DNS":{"DataType":"data","NodeVal":"c0a80064","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.DNS"},"Gateway":{"DataType":"data","NodeVal":"c0a800fe","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.Gateway"},"IP Address":{"DataType":"data","NodeVal":"c0a80001","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.IP Address"},"Password":{"DataType":"string","NodeVal":"dascom","Length":9,"path":"WiFi Cfg.Password"},"SSID":{"DataType":"string","NodeVal":"SeedWIFIPrinter","Length":24,"path":"WiFi Cfg.SSID"},"Subnet Mask":{"DataType":"data","NodeVal":"ffffff00","Length":4,"Tag":"Tag_IP","path":"WiFi Cfg.Subnet Mask"},"WiFi Enable":{"DataType":"list","NodeVal":"0","ListVal":"OFF;ON","path":"WiFi Cfg.WiFi Enable"},"WiFi Mode":{"DataType":"list","NodeVal":"1","ListVal":"CLIENT;SERVER","path":"WiFi Cfg.WiFi Mode"}}},"Cfg Packet":{"NodeVal":"AgEB2AHu//9EUjEwRURTAAAAAAAAAAAAAbgh3gEBAAYCAQAAAAADAQMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAQEDAAAABAEAAAAAAAAAAAAAAAAAAQAKAQBTZWVkV0lGSVByaW50ZXIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoKCgoKCsCoAAH///8AwKgA/sCoAGTAqAAKZGFzY29tAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFTZWVkIEJUUFJJTlRFUgAAADAwMDAAAAAAAAAAAQAAAMCoAAEXAMCoAAeMI8CoAAEDAMIBAAAA////AFAAAAAAAAAAAwAAAAT/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAIACgoKCgoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","path":"Cfg Packet"}}')
         console.log('stop loading');
         setTimeout(() => {
           this.isConfigLoading = false;
         }, 50);
       },
-      async fetchData () {
+      async fetchData() {
         this.tableLoading = true;
         this.tableData = [];
         console.log('start fetch data');
@@ -399,15 +395,13 @@
 
         this.tableLoading = false;
       },
-      async fetchInfo (number, type) {
+      async fetchInfo(number, type) {
         await getPrinterInfo(number, type)
           .then(res => {
             let nodes = parseNode2(res.data);
 
             let ff = nodes.map(node => {
-              return <node-view node = {
-                node
-              } > </node-view>;
+              return <node-view node = {node}></node-view>;
             });
 
             this.$Modal.info({
@@ -428,20 +422,20 @@
 
         this.tableLoading = false
       },
-      showDeleteModal (row) {
+      showDeleteModal(row) {
         this.deleteModel = true
       },
-      showAddModal () {
+      showAddModal() {
         this.newInfo = defaultInfo()
         this.type = 'add'
         this.addModel = true
       },
-      showEditModal (row) {
+      showEditModal(row) {
         this.newInfo = deepClone(row)
         this.type = 'edit'
         this.addModel = true
       },
-      handleSubmit (name) {
+      handleSubmit(name) {
         this.$refs[name].validate(
           async function (valid) {
             if (valid) {
@@ -477,10 +471,10 @@
           }.bind(this)
         )
       },
-      handleReset (name) {
+      handleReset(name) {
         this.$refs[name].resetFields();
       },
-      filterChange (value) {
+      filterChange(value) {
         console.log(value)
       }
     }

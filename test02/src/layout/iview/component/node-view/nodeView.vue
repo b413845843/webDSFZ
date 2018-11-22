@@ -1,37 +1,22 @@
 <template>
   <div>
     <h3>{{title}}</h3>
-    <div v-for="({title,content,datas},index) in items" class="leaf" :key="index">
+    <div v-for="({title,content,datas},index) in items" class="nodeleaf" :key="index">
       <h4 v-if="datas">{{title}}</h4>
-      <div v-if="datas" class="leaf">
+      <div v-if="datas" class="nodeleaf">
         <p v-for="(data,index) in datas" :key="index">
           <span class="leafTitle">{{data.title}}</span> : <span class="leafContent">{{data.content}}</span>
         </p>
       </div>
-      <p v-else class="leaf"> <span class="leafTitle">{{title}}</span> : <span class="leafContent">{{content}}</span></p>
+      <p v-else class="nodeleaf"> <span class="leafTitle">{{title}}</span> : <span class="leafContent">{{content}}</span></p>
     </div>
   </div>
 </template>
 
-<style scoped>
-  .leaf {
-    padding-left: 10px;
-  }
-
-  .leafTitle {
-    color: rgb(107, 105, 105)
-  }
-
-  .leafContent {
-    color: dodgerblue;
-    font-weight: bold
-  }
-
-</style>
-
 <script>
+import './nodeView.less'
   export default {
-    name: 'nodeView',
+    name: 'NodeView',
     props: {
       node: Object
     },
@@ -67,3 +52,7 @@
   }
 
 </script>
+
+<style lang="less" scoped>
+
+</style>
