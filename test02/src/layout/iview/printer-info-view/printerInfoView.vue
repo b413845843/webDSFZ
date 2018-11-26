@@ -14,9 +14,6 @@
           <p> dsPrnService : {{version.dsPrnService.Ver}} </p>
           <p>libdsDevJsLib.so : {{version.DevLib['libdsDevJsLib.so'].Ver}} </p>
           <p>libdsDevBmp.so : {{version.DevLib['libdsDevBmp.so'].Ver}} </p>
-          <p>
-            cuck
-          </p>
         </div>
         <p v-else slot="content">获取数据...</p>
         <Spin size="large" fix v-if="versonFetching"></Spin>
@@ -31,48 +28,12 @@
       <Page :total="tableData.length" size="small" show-elevator show-sizer style="margin-top:10px" />
     </Row>
 
-    <Modal v-model="deleteModel" title="删除" ref="deleteModel">
-      <div>准备删除</div>
-    </Modal>
-
-    <Modal v-model="editeModel" title="编辑" ref="editeModel">
-      <div>编辑</div>
-    </Modal>
-
-    <Modal v-model="addModel" :title="type=='add'?'添加':'编辑'" ref="addModel" footer-hide>
-      <Form ref="infoForm" :model="newInfo" :label-width="80">
-        <FormItem label="SN" prop="Number">
-          <Input v-model="newInfo.Number" placeholder="SN"></Input>
-        </FormItem>
-        <FormItem label="Model" prop="Model">
-          <Input v-model="newInfo.Model" placeholder="Model"></Input>
-        </FormItem>
-        <FormItem label="status" prop="Status">
-          <Select v-model="newInfo.Status">
-            <Option v-for="statu in status" :value="statu" :key='statu'>{{statu}}</Option>
-
-          </Select>
-        </FormItem>
-        <FormItem label="Received" prop="Received">
-          <Input v-model="newInfo.Received" placeholder="Received"></Input>
-        </FormItem>
-        <FormItem label="Jobs" prop="Jobs">
-          <Input v-model="newInfo.Jobs" placeholder="Jobs"></Input>
-        </FormItem>
-        <FormItem label="Ticks" prop="Ticks">
-          <Input v-model="newInfo.Ticks" placeholder="Ticks"></Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="handleSubmit('infoForm')">确定</Button>
-          <Button @click="handleReset('infoForm')" style="margin-left: 8px">复位</Button>
-        </FormItem>
-      </Form>
-    </Modal>
+    <node-view-modal :toShow="infoModal" :nodes='infoNodes' @action='infoModalAction' :number="currentNumber"></node-view-modal>
 
     <config-view :show="showConfig" :isLoading="isConfigLoading" @action="configAction" @get-config="fetchConfig" :json="configJson"
-      :number="configNumber"></config-view>
+      :number="currentNumber"></config-view>
 
-    <print-view :show="showPrint" @action="printAction" :number="configNumber"></print-view>
+    <print-view :show="showPrint" @action="printAction" :number="currentNumber"></print-view>
   </Card>
 </template>
 
@@ -173,7 +134,7 @@
                 'dot-link', {
                   props: {
                     click: () => {
-                      console.log(`请求info 1 ${params.row.Number}`);
+                      console.log(`请求info 2 ${params.row.Number}`);
 
                       this.fetchInfo(params.row.Number, 2);
                     },
@@ -212,7 +173,7 @@
                           `index ${params.index} number ${params.row.Number}`
                         );
                         this.showPrint = true;
-                        this.configNumber = params.row.Number;
+                        this.currentNumber = params.row.Number;
                       }
                     }
                   },
@@ -238,7 +199,7 @@
                         console.log(
                           `index ${params.index} number ${params.row.Number}`
                         );
-                        this.configNumber = params.row.Number;
+                        this.currentNumber = params.row.Number;
                         this.fetchConfig('WIFI');
                       }
                     }
@@ -314,10 +275,12 @@
         showConfig: false,
         isConfigLoading: false,
         configJson: {},
-        configNumber: '',
+        currentNumber: '',
         showPrint: false,
         isGettingPrinting: false,
-        filterValue: []
+        filterValue: [],
+        infoModal: false,
+        infoNodes:[]
       };
     },
 
@@ -343,7 +306,9 @@
           this.showPrint = false;
         }
       },
-
+      infoModalAction() {
+        this.infoModal = false
+      },
       async fetchVersion() {
         this.versonFetching = true;
         this.version = null;
@@ -362,7 +327,7 @@
         this.showConfig = true;
         this.isConfigLoading = true;
         this.configJson = null;
-        await getConfig(this.configNumber, type)
+        await getConfig(this.currentNumber, type)
           .then(res => {
             this.configJson = res.data;
           })
@@ -398,20 +363,10 @@
       async fetchInfo(number, type) {
         await getPrinterInfo(number, type)
           .then(res => {
-            let nodes = parseNode2(res.data);
-
-            let ff = nodes.map(node => {
-              return <node-view node = {node}></node-view>;
-            });
-
-            this.$Modal.info({
-              title: `设备  ${number}`,
-
-              render: (h, params) => {
-                return ff
-              },
-              maskClosable: true
-            });
+            let nodes = parseNode2(res.data)
+            this.currentNumber = number          
+            this.infoNodes = nodes
+            this.infoModal = true
           })
           .catch(err => {
             console.log(err);

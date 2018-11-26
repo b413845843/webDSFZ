@@ -1,19 +1,20 @@
 <template>
   <div>
-    <h3>{{title}}</h3>
+    <h3>{{tt(title)}}</h3>
     <div v-for="({title,content,datas},index) in items" class="nodeleaf" :key="index">
-      <h4 v-if="datas">{{title}}</h4>
+      <h4 v-if="datas">{{tt(title)}}</h4>
       <div v-if="datas" class="nodeleaf">
         <p v-for="(data,index) in datas" :key="index">
-          <span class="leafTitle">{{data.title}}</span> : <span class="leafContent">{{data.content}}</span>
+          <span class="leafTitle">{{tt(data.title)}}</span> : <span class="leafContent">{{data.content}}</span>
         </p>
       </div>
-      <p v-else class="nodeleaf"> <span class="leafTitle">{{title}}</span> : <span class="leafContent">{{content}}</span></p>
+      <p v-else class="nodeleaf"> <span class="leafTitle">{{tt(title)}}</span> : <span class="leafContent">{{content}}</span></p>
     </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue/dist/vue.js'
 import './nodeView.less'
   export default {
     name: 'NodeView',
@@ -26,8 +27,17 @@ import './nodeView.less'
         title: ''
       }
     },
-    created: function () {
-      if (this.node) {
+    watch: {
+      node(){
+        this.nodesInit()
+      }
+    },
+    mounted(){
+      this.nodesInit()
+    },
+    methods:{
+      nodesInit(){
+        if (this.node) {
         this.title = this.node.name
         this.items = this.node.nodes.filter(node => {
           if (node.name === 'SEP') {
@@ -48,6 +58,14 @@ import './nodeView.less'
           }
         })
       };
+      },
+      tt: function(key){        
+        if(this.$t !== undefined){
+          return this.$t(key)
+        }else{          
+          return key
+        }
+      }
     }
   }
 

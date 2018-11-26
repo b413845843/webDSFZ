@@ -42,8 +42,8 @@
   </div>
 </template>
 
-
 <script>
+  import './loginView.less'
   export default {
     name: 'LoginView',
     data() {

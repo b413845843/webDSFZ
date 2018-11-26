@@ -1,8 +1,8 @@
 <template>
   <Modal v-model="toShow" @on-cancel="actionCancel">
-    <div slot="header" style="height:50px">
-      <div>编辑:{{number}} : {{wod}}</div>
-      <Row style="height:100%;padding:15px 0 5px 0px" justify="center" align="middle">
+    <div slot="header" >
+      <div><Tag type="border" >设备编码:<span>{{number}}</span></Tag></div>
+      <Row style="padding:15px 0 5px 0px" justify="center" align="middle">
         <Col span="12" class="col"><Button :type="wod?'primary':'text'" class="btn" @click="changeClick('WIFI')">WIFI</Button></Col>
         <Col span="12" class="col"><Button :type="wod==false?'primary':'text'" class="btn" @click="changeClick('DEVICE')">DEVICE</Button></Col>
       </Row>

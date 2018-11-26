@@ -1,7 +1,7 @@
 <template>
   <Modal v-model="toShow" @on-cancel="actionCancel">
     <div slot="header">
-      <h4 style="height:26px">打印</h4>
+      <Tag type="border">设备编码:<span>{{number}}</span></Tag>
     </div>
     <Row style="display:table;">
       <RadioGroup v-model="printType" style="padding-left:10px;display: table-cell; vertical-align: middle;">
@@ -10,7 +10,6 @@
         <Radio label="文本"></Radio>
         <Radio label="16进制指令"></Radio>
       </RadioGroup>
-      <Tag type="border" style="float:right">设备编码:<span>{{number}}</span></Tag>
     </Row>
 
     <Row v-if="printType === '图片'">
@@ -122,8 +121,6 @@
     <Spin size="large" fix v-if="isLoading"></Spin>
   </Modal>
 </template>
-
-
 
 <script>
   import './printView.less'
