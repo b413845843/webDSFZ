@@ -1,179 +1,21 @@
 <template>
   <div class="container">
-    <Card class="card">
-      <p slot="title">{{ isLogin ?'登录':'注册' }} <a style="float:right" size="samll" @click="gotoRegister">{{isLogin?'注册':'登录'}}</a></p>
-      <transition name="slide-fade" mode="out-in">
-        <Form v-if="isLogin" ref="loginForm" :model="user" :label-width=60 :rules="rules" key="1">
-          <FormItem label="用户名" prop="name">
-            <Input v-model="user.name" placeholder="输入账户" clearable></Input>
-          </FormItem>
-          <FormItem label="密码" prop="password">
-            <Input v-model="user.password" type="password" placeholder="密码" clearable></Input>
-          </FormItem>
-          <FormItem>
-            <Button type="primary" @click="login" :loading="loginging">
-              <span v-if="loginging">正在登录</span>
-              <span v-else>登录</span>
-
-            </Button>
-          </FormItem>
-        </Form>
-        <Form v-else ref="registerForm" :model="ruser" :label-width=80 :rules="resigsterRules" key="2">
-          <FormItem label="用户名" prop="name">
-            <Input v-model="ruser.name" placeholder="输入用户名" clearable></Input>
-          </FormItem>
-          <FormItem label="密码" prop="password">
-            <Input v-model="ruser.password" placeholder="密码" clearable></Input>
-          </FormItem>
-          <FormItem label="确认密码" prop="passwordCheck">
-            <Input v-model="ruser.passwordCheck" placeholder="确认密码" clearable></Input>
-          </FormItem>
-          <FormItem label="邮件" prop="email">
-            <Input v-model="ruser.email" placeholder="邮件" clearable></Input>
-          </FormItem>
-          <FormItem>
-            <Button type="primary">注册</Button>
-          </FormItem>
-        </Form>
-
-      </transition>
-
-    </Card>
+    <div class="card">
+       <Card >
+          <h4 slot="title">欢迎登陆</h4>
+          <login-form></login-form>
+        </Card>
+    </div>
   </div>
 </template>
 
 <script>
   import './loginView.less'
+  import LoginForm from '@/layout/iview/component/login-form'
+  
   export default {
     name: 'LoginView',
-    data() {
-      const validatePass = function (rule, value, callback) {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if (
-            this.ruser.passwordCheck !== '' &&
-            this.ruser.passwordCheck.length > 0
-          ) {
-            this.$refs.registerForm.validateField('passwordCheck');
-          }
-          if (this.ruser.passwordCheck === '') {
-            this.$refs.registerForm.validateField('passwordCheck');
-          }
-          callback();
-        }
-      }.bind(this);
-      const validatePassCheck = function (rule, value, callback) {
-        if (this.ruser.password === '') {
-          this.$refs.registerForm.validateField('password');
-        } else if (value === '' || value.length <= 0) {
-          callback(new Error('请再次输入密码'));
-        } else if (this.ruser.password !== value) {
-          callback(new Error('两次输入密码不一致'));
-        } else {
-          callback();
-        }
-      }.bind(this);
-
-      return {
-        isLogin: true,
-        loginging: false,
-        rules: {
-          name: [{
-            required: true,
-            message: '用户名不能为空',
-            trigger: 'blur'
-          }],
-          password: [{
-            required: true,
-            message: '密码名不能为空',
-            trigger: 'blur'
-          }],
-          passwordCheck: [{
-            required: true,
-            message: '密码名不能为空',
-            trigger: 'blur'
-          }],
-          email: [{
-            required: true,
-            message: '密码名不能为空',
-            trigger: 'blur'
-          }]
-        },
-        resigsterRules: {
-          name: [{
-            required: true,
-            message: '用户名不能为空',
-            trigger: 'blur'
-          }],
-          password: [{
-              validator: validatePass,
-              trigger: 'blur'
-            },
-            {
-              required: true,
-              message: '密码名不能为空',
-              trigger: 'blur'
-            }
-          ],
-          passwordCheck: [{
-              validator: validatePassCheck,
-              trigger: 'blur'
-            },
-            {
-              required: true,
-              message: '密码名不能为空',
-              trigger: 'blur'
-            }
-          ],
-          email: [{
-              required: true,
-              message: '邮件不能为空',
-              trigger: 'blur'
-            },
-            {
-              type: 'email',
-              message: 'email',
-              trigger: 'blur'
-            }
-          ]
-        },
-        user: {
-          name: '',
-          password: ''
-        },
-        ruser: {
-          name: '',
-          password: '',
-          passwordCheck: ''
-        }
-      };
-    },
-    methods: {
-      gotoRegister: function () {
-        this.isLogin = !this.isLogin;
-      },
-      login() {
-        this.loginging = true;
-        console.log(this.isLogin);
-        if (this.user.name === '123' && this.user.password === '123') {
-          this.$Message.success({
-            content: '登录成功'
-          })
-
-          setTimeout(() => {
-            this.$router.push('/manager');
-          }, 2000)
-        } else {
-          this.$Message.error({
-            content: '账户名或者密码错误'
-          })
-        }
-        setTimeout(() => {
-          this.loginging = false
-        }, 2000)
-      }
-    }
+    components:{LoginForm},
   }
 
 </script>

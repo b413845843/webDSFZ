@@ -2,10 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue/dist/vue.js'
 import App from './App'
-import iviewRouter from './router/iviewIndex.js'
+import router from './router/'
 import i18n from '@/locale'
+import store from '@/store'
 
-import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 import iView from 'iview'
@@ -30,24 +30,15 @@ Vue.component('more-info-row', moreInfoRow)
 Vue.component('node-view-modal', nodeViewModal)
 Vue.use(iView)
 
-iviewRouter.beforeEach((to, from, next) => {
-  NProgress.start()
-  window.document.title = to.meta.title
-  next()
-})
-
 Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)
 })
 
-iviewRouter.afterEach(() => {
-  NProgress.done()
-})
-
 export default new Vue({
   el: '#app',
-  router: iviewRouter,
+  router,
   i18n,
+  store,
   components: {
     App
   },

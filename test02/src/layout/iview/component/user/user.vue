@@ -1,20 +1,46 @@
 <template>
+<div>
+  <div class="nameDiv">你好 <span class="name">{{userName}}</span>
+  </div>
   <div class="user-dropList">
-    <Dropdown>
+    <Dropdown @on-click='handleClick'>
       <Avatar icon="ios-person" />
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
-        <DropdownItem>退出登录</DropdownItem>
+        <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
   </div>
+</div>
 </template>
 
 <script>
   import './user.less'
-
+  import { mapActions } from 'vuex'
   export default {
-    name: 'User'
+    name: 'User',
+    computed: {
+      userName() {
+        return this.$store.state.user.userName
+      }
+    },
+    methods: {
+      ...mapActions([
+        'handleLogout'
+      ]),
+      logout() {
+        this.handleLogout().then(() => {
+            this.$router.push({
+              name: 'login'
+            })
+          })
+      },
+      handleClick (name) {
+        if (name === 'logout') {
+          this.logout()
+        }
+      }
+    }
   }
 
 </script>

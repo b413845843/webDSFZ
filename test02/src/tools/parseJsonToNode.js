@@ -51,54 +51,6 @@ Node.prototype.log = function() {
   }
 }
 
-
-export function parseNode(obj, index, name) {
-  let res
-  if (Array.isArray(obj)) {
-    res = []
-    obj.forEach(element => {
-      let node = parseNode(element, index, '')
-      console.log('>>>>>>');
-
-      console.log(node);
-
-      res.push(node)
-    });
-
-  } else {
-    if (typeof obj == 'object') {
-      res = {}
-      res.index = index
-      if (obj['DataType']) {
-        // console.log(name);
-
-        res.type = 'leaf'
-        res.name = name
-
-      } else {
-        res.type = 'item'
-        let keyCount = 0
-        let keyName
-        for (const key in obj) {
-          keyCount += 1
-          keyName = key
-        }
-
-        if (keyCount == 1) {
-          res.name = keyName
-        }
-
-        for (const key in obj) {
-          res.nodes.push(parseNode(obj[key], index + 1, key))
-        }
-      }
-    }
-
-  }
-
-  return res
-}
-
 export function parseNode2(obj, index, nodes) {
 
   let res
@@ -110,7 +62,6 @@ export function parseNode2(obj, index, nodes) {
 
       res.push(node)
     });
-
 
   } else {
     if (typeof obj == 'object') {

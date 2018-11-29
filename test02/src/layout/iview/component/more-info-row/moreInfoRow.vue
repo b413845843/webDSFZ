@@ -28,8 +28,9 @@
   import {
     parseNode2
   } from '@/tools/parseJsonToNode';
-
+  import nodeView from '@/layout/iview/component/node-view'
   export default {
+    components:{nodeView},
     name: 'MoreInfoRow',
     props: {
       number: String,

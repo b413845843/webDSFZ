@@ -5,12 +5,12 @@
         <Icon type="md-refresh" size=16 /> 刷新列表
       </Button>
 
-      <Poptip trigger="hover" placement="left" @on-popper-show="fetchVersion" style="float:right;margin-right:10px;">
+      <Poptip placement="left" @on-popper-show="fetchVersion" style="float:right;margin-right:10px;">
 
         <Button type="text">
           <Icon type="md-information-circle" size=14 /> 版本信息</Button>
         <div v-if="version" class="versionSpan" slot="content">
-          <p>webVer : 1.0.0.1</p>
+          <p>webVer : {{webVersion}}</p>
           <p> dsPrnService : {{version.dsPrnService.Ver}} </p>
           <p>libdsDevJsLib.so : {{version.DevLib['libdsDevJsLib.so'].Ver}} </p>
           <p>libdsDevBmp.so : {{version.DevLib['libdsDevBmp.so'].Ver}} </p>
@@ -53,7 +53,6 @@
   import {
     parseNode2
   } from '@/tools/parseJsonToNode';
-
   const status = ['Ready', 'Busy', 'Warn', 'Error', 'None', 'Dead'];
 
   function defaultInfo() {
@@ -73,7 +72,7 @@
       return {
         tableCols: [{
             type: 'selection',
-            width: 60,
+            width: 50,
             align: 'center'
           },
           {
@@ -126,6 +125,7 @@
           {
             title: '网络/状态',
             key: 'Status',
+            minWidth: 80,
             render: (h, params) => {
               // const color = params.row.Status === 'Ready'?'success':'error'
               // const type = params.row.Net === 'Online'?'Ready':'Error'
@@ -280,7 +280,8 @@
         isGettingPrinting: false,
         filterValue: [],
         infoModal: false,
-        infoNodes:[]
+        infoNodes: [],
+        webVersion: '1.11.26.1'
       };
     },
 
@@ -364,7 +365,7 @@
         await getPrinterInfo(number, type)
           .then(res => {
             let nodes = parseNode2(res.data)
-            this.currentNumber = number          
+            this.currentNumber = number
             this.infoNodes = nodes
             this.infoModal = true
           })

@@ -1,0 +1,27 @@
+
+.login-tip{
+  margin-top: 20px;
+  font-size: 10px;
+  text-align: center;
+  color: #c3c3c3;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */
+  {
+  transform: translateX(50px);
+  opacity: 0;
+}
+
+.slide-fade-enter {
+  transform: translateX(-50px);
+  opacity: 0;
+}

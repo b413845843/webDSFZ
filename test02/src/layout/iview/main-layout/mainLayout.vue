@@ -6,9 +6,9 @@
 
     <Layout>
       <Header style="padding:0;width:100%;z-index:10000;backgroundColor:#FFF" class="layout">
-        <topHeader :collapsed="isCollapsed" @on-change="handleCollpasedChange" :icon="icon">
+        <top-header :collapsed="isCollapsed" @on-change="handleCollpasedChange" :icon="icon">
           <user></user>
-        </topHeader>
+        </top-header>
       </Header>
       <Layout style="padding:20px;overflow:auto">
         <Content>
@@ -18,7 +18,6 @@
     </Layout>
     <BackTop></BackTop>
   </Layout>
-
 </template>
 
 <script>
