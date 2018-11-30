@@ -5,11 +5,13 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "ns": "export NODE_ENV='dev' && node ./nodeServer/bin/www"
   },
   "dependencies": {
     "ajv": "^6.5.5",
     "axios": "^0.18.0",
+    "http-proxy-middleware": "^0.19.1",
     "iview": "^3.1.5",
     "js-base64": "^2.4.9",
     "js-cookie": "^2.2.0",

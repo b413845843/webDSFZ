@@ -5,6 +5,7 @@ function resolve(dir) {
 }
 
 module.exports = {
+  outputDir: resolve('nodeServer/dist'),
   configureWebpack: config => {
     config.resolve = {
       extensions: ['.js', '.vue', '.json', '.css'],

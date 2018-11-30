@@ -18,10 +18,10 @@
         ai
       </template>
       <MenuItem name="2-1">
-      <router-link to="/home/foo">foo</router-link>
+      <router-link to="/foo">foo</router-link>
       </MenuItem>
       <MenuItem name="2-2">
-      <router-link to="/home/bar">bar</router-link>
+      <router-link to="/bar">bar</router-link>
       </MenuItem>
     </Submenu>
     <Submenu name="3">

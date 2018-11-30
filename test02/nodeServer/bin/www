@@ -1,0 +1,110 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('nodeserver:server');
+var http = require('http');
+var net = require('net')
+
+// // 检测端口是否被占用
+function portIsOccupied(P) {
+  // 创建服务并监听该端口
+  var server = net.createServer().listen(P)
+
+  server.on('listening', function() { // 执行这块代码说明端口未被占用
+    server.close() // 关闭服务
+    console.log('The port【' + P + '】 is available.') // 控制台输出信息
+    port = P
+    start()
+  })
+
+  server.on('error', function(err) {
+    if (err.code === 'EADDRINUSE') { // 端口已经被使用
+      console.log('The port【' + P + '】 is occupied...')
+
+      portIsOccupied(P + 1)
+    }
+  })
+}
+
+var port = 0
+var server;
+
+function getPort() {
+  if (process.env.NODE_ENV === 'dev') {
+    portIsOccupied(8080)
+  } else {
+    port = 80
+    start()
+  }
+}
+
+/**
+ * Get port from environment and store in Express.
+ */
+// console.log(process.env);
+
+// var port = normalizePort(process.env.PORT || '8022');
+getPort()
+
+function start() {
+  app.set('port', port);
+
+  /**
+   * Create HTTP server.
+   */
+
+  server = http.createServer(app);
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string' ?
+    'Pipe ' + port :
+    'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string' ?
+    'pipe ' + addr :
+    'port ' + addr.port;
+  debug('Listening on ' + bind);
+  console.log('Server is Listening on ' + bind);
+}
