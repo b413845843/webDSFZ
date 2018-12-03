@@ -34,7 +34,6 @@
       :number="currentNumber"></config-view>
 
     <print-view :show="showPrint" @action="printAction" :number="currentNumber"></print-view>
-    <p>getHello:{{helloStr}}</p>
   </Card>
 </template>
 
@@ -54,7 +53,6 @@
   import {
     parseNode2
   } from '@/tools/parseJsonToNode';
-  import { hello } from '@/api/express';
 
   const status = ['Ready', 'Busy', 'Warn', 'Error', 'None', 'Dead'];
 
@@ -284,8 +282,7 @@
         filterValue: [],
         infoModal: false,
         infoNodes: [],
-        webVersion: '1.11.26.1',
-        helloStr: ''
+        webVersion: '1.11.26.1'
       };
     },
 
@@ -295,14 +292,6 @@
         duration: 2
       });
       this.fetchData();
-        hello().then(res => {
-        this.helloStr = res
-      }).catch(error => {
-        this.$Message.error({
-          content: `${error}`
-        })
-      })
-      // this.fetchVersion()
     },
 
     methods: {

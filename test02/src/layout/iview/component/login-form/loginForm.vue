@@ -10,7 +10,7 @@
             </Input>
           </FormItem>
           <FormItem prop="password">
-            <Input v-model="user.password" type="password" placeholder="密码" clearable>
+            <Input v-model="user.password" type="password" placeholder="密码" clearable @keyup.enter="login">
               <span slot="prepend">
                   <Icon :size="14" type="md-lock"></Icon>
               </span>
@@ -20,8 +20,8 @@
               <span v-if="loginging">正在登录</span>
               <span v-else>登录</span>
             </Button>
-            <p class="login-tip">输入任意用户名和密码123即可</p>
         </Form>
+
         <Form v-else ref="registerForm" :model="ruser" :rules="resigsterRules" key="2">
           <FormItem prop="name">
             <Input v-model="ruser.name" placeholder="输入用户名" clearable>
@@ -50,7 +50,7 @@
               </span>
             </Input>
           </FormItem>
-          <Button type="primary" long>注册</Button>
+          <Button type="primary" long @click="register">注册</Button>
         </Form>
       </transition>
   </div>
@@ -61,6 +61,7 @@ import './loginForm.less'
 import { mapActions } from 'vuex'
 
 export default {
+  props: { isLogin: Boolean },
   name: 'LoginForm',
   data() {
       const validatePass = function (rule, value, callback) {
@@ -92,7 +93,6 @@ export default {
       }.bind(this);
 
       return {
-        isLogin: true,
         loginging: false,
         rules: {
           name: [{
@@ -161,34 +161,46 @@ export default {
         ruser: {
           name: '',
           password: '',
-          passwordCheck: ''
+          passwordCheck: '',
+          email: ''
         }
       };
     },
     methods: {
       ...mapActions([
-        'handleLogin'
+        'handleLogin',
+        'handleRegister'
       ]),
-      gotoRegister: function () {
-        this.isLogin = !this.isLogin;
-      },
       async login() {
         this.loginging = true;
-    
+
         await this.handleLogin(this.user).then(res => {
           this.$Message.info({
             content: '登陆成功'
           })
           this.$router.push('/home')
-        }).catch( err => {
+        }).catch(err => {
           console.log(this);
-          
           this.$Message.error({
-            content: err.message
+            content: err.msg
           })
         })
 
         this.loginging = false
+      },
+      async register() {
+        console.log(this.ruser)
+        await this.handleRegister(this.ruser).then(res => {
+          this.$Message.info({
+            content: '注册成功'
+          })
+          this.$router.push('/home')
+        }).catch(err => {
+          console.log(this);
+          this.$Message.error({
+            content: err.msg
+          })
+        })
       }
     }
 }
