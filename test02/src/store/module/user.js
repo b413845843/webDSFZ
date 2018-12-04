@@ -48,7 +48,7 @@ export default {
           if (res.data.message !== 'ok') {
             reject(res.data)
           } else {
-            setToken(res.token)
+            setToken(res.data.token)
             setUser(name)
             resolve()
           }

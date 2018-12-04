@@ -6,19 +6,45 @@ var logger = require('morgan');
 var history = require('connect-history-api-fallback');
 // var proxy = require('http-proxy-middleware')
 
+// 路由
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var apiRouter = require('./routes/api')
+var wxRouter = require('./routes/wx')
+
+// 配置
+var config = require('./config/jwt_config')
 
 var app = express();
 
-app.use(history());
+// 配合vue的history模式
+app.use(history({
+  rewrites: [
+    {
+      from: /^\/wx\/.*$/,
+      to: function(context) {
+        console.log('/wx' + context.parsedUrl.pathname);
+        return context.parsedUrl.pathname;
+      }
+    },
+    {
+      from: /^\/users\/.*$/,
+      to: function(context) {
+        return context.parsedUrl.pathname;
+      }
+    }
+  ]
+}));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// app.use('/api', proxy({ target: 'localhost', changeOrigin: true }))
+// 设置全局变量 jwtsecret
+app.set('jwtsecret', config.jwtsecret)
 
+// app.use('/api', proxy({ target: 'localhost', changeOrigin: true }))
+// 默认
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,9 +52,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
+// app.use(jwt({ secret: Buffer.from(config.jwtsecret, 'base64') }).unless({ path: ['/login'] }));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
+app.use('/wx', wxRouter)
 
 //  设置允许跨域访问该服务.
 app.all('*', function(req, res, next) {

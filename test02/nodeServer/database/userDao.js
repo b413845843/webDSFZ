@@ -18,9 +18,9 @@ let userDao = {
             console.log(`[select error] - ${err.message}`);
             reject(err)
           } else {
-            console.log('--------------------------SELECT ALL----------------------------');
+            console.log('--------------------------SELECT ALL----------------------------\n');
             console.log(result);
-            console.log('------------------------------------------------------------\n\n');
+            console.log('------------------------------------------------------------\n');
             resolve(result)
           }
           con.release()

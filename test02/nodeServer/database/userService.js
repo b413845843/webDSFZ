@@ -1,4 +1,17 @@
 var userDao = require('../database/userDao')
+var jwt = require('jsonwebtoken')
+
+const config = require('../config/jwt_config')
+const loggerFactory = require('../log/log4js')
+
+const loginLogger = loggerFactory.getLogger('login')
+
+function creaetToken (name, password) {
+  const token = jwt.sign({ name, password }, config.jwtsecret, {
+    expiresIn: 60 * 60 * 24// 授权时效24小时
+  })
+  return token
+}
 
 module.exports = {
   async login(username, password) {
@@ -7,7 +20,9 @@ module.exports = {
       if (users && users.length) {
         for (let i = 0; i < users.length; i++) {
           if (users[i].username === username && users[i].password === password) {
-            return { token: '123token', message: 'ok' }
+            const token = creaetToken(username, password)
+            loginLogger.info(`用户:${username} 进行了登录操作 token : ${token}`)
+            return { token: token, message: 'ok' }
           }
         }
       }
@@ -30,7 +45,8 @@ module.exports = {
       } else {
         const id = await userDao.addUser(username, password, mail)
         if (id) {
-          return { token: '123token', message: 'ok' }
+          const token = creaetToken(username, password)
+          return { token: token, message: 'ok' }
         } else {
           return { message: '注册失败' }
         }

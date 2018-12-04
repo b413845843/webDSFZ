@@ -14,8 +14,6 @@ router.post('/login', async function(req, res, next) {
   console.log(`${JSON.stringify(req.body)} 响应/login`);
 
   const msg = await userService.login(username, password)
-  console.log(msg);
-
   res.send(msg)
 })
 

@@ -12,7 +12,6 @@
   "dependencies": {
     "ajv": "^6.5.5",
     "axios": "^0.18.0",
-    "express-jwt": "^5.3.1",
     "http-proxy-middleware": "^0.19.1",
     "iview": "^3.1.5",
     "js-base64": "^2.4.9",
