@@ -7,33 +7,36 @@ module.exports = {
       if (users && users.length) {
         for (let i = 0; i < users.length; i++) {
           if (users[i].username === username && users[i].password === password) {
-            return { token: '123token', msg: 'ok' }
+            return { token: '123token', message: 'ok' }
           }
         }
       }
-      return { msg: '用户或者密码错误', errcode: 2 }
+      return { message: '用户或者密码错误', errcode: 2 }
     } catch (error) {
-      return { msg: error.message, errcode: 1 }
+      return { message: error.message, errcode: 1 }
     }
   },
   async register(username, password, mail) {
+    if (username === '' || password === '' || mail === '') {
+      return { message: '注册信息有误', errcode: 3 }
+    }
     try {
       const users = await userDao.getUserByname(username)
       let user = users[0]
       console.log(`find user ${user}`);
 
       if (user && user.username) {
-        return { msg: '用户已存在' }
+        return { message: '用户已存在' }
       } else {
         const id = await userDao.addUser(username, password, mail)
         if (id) {
-          return { token: '123token', msg: 'ok' }
+          return { token: '123token', message: 'ok' }
         } else {
-          return { msg: '注册失败' }
+          return { message: '注册失败' }
         }
       }
     } catch (error) {
-      return { msg: error.message, errcode: 2 }
+      return { message: error.message, errcode: 2 }
     }
   }
 }

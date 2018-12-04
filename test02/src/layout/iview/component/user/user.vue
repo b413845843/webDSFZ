@@ -17,11 +17,12 @@
 <script>
   import './user.less'
   import { mapActions } from 'vuex'
+  import { getUser } from '@/lib/util'
   export default {
     name: 'User',
     computed: {
       userName() {
-        return this.$store.state.user.userName
+        return getUser()
       }
     },
     methods: {

@@ -1,8 +1,9 @@
-import MainLayout from '@/layout/iview/main-layout'
-import PrinterInfoView from '@/layout/iview/printer-info-view'
-import LoginView from '@/layout/iview/login-view'
-import error401 from '@/layout/iview/error-pages/401.vue'
-import error404 from '@/layout/iview/error-pages/404.vue'
+let MainLayout = () => import('@/layout/iview/main-layout')
+let PrinterInfoView = () => import('@/layout/iview/printer-info-view')
+let LoginView = () => import('@/layout/iview/login-view')
+let error404 = () => import('@/layout/iview/error-pages/404.vue')
+let error401 = () => import('@/layout/iview/error-pages/401.vue')
+
 const Foo = {
   template: '<div class="foo">foo</div>'
 }

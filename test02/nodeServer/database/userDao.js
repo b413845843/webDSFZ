@@ -9,6 +9,10 @@ let userDao = {
   getAllUser() {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, con) => {
+        if (err) {
+          reject(err)
+          return
+        }
         con.query(selectAll, (err, result) => {
           if (err) {
             console.log(`[select error] - ${err.message}`);
@@ -27,6 +31,10 @@ let userDao = {
   getUserByname(name) {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, con) => {
+        if (err) {
+          reject(err)
+          return
+        }
         con.query(selectByName, [name], (err, result) => {
           if (err) {
             console.log(`[select one error] - ${err.message}`);
@@ -44,8 +52,11 @@ let userDao = {
   },
   addUser(username, password, mail) {
     return new Promise((resolve, reject) => {
-
       pool.getConnection((err, con) => {
+        if (err) {
+          reject(err)
+          return
+        }
         con.query(inserUser, [username, password, mail], (err, result) => {
           if (err) {
             console.log(`[inser user] - ${err.message}`);

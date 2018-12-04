@@ -13,12 +13,12 @@ import 'iview/dist/styles/iview.css'
 
 import './index.less'
 
-import dotLink from '@/layout/iview/component/dot-link'
-import nodeView from '@/layout/iview/component/node-view'
-import configView from '@/layout/iview/component/config-view'
-import printView from '@/layout/iview/component/print-view'
-import moreInfoRow from '@/layout/iview/component/more-info-row'
-import nodeViewModal from '@/layout/iview/component/node-view-modal'
+let nodeView = () => import('@/layout/iview/component/node-view')
+let configView = () => import('@/layout/iview/component/config-view')
+let printView = () => import('@/layout/iview/component/print-view')
+let moreInfoRow = () => import('@/layout/iview/component/more-info-row')
+let nodeViewModal = () => import('@/layout/iview/component/node-view-modal')
+let dotLink = () => import('@/layout/iview/component/dot-link')
 
 Vue.config.productionTip = false
 

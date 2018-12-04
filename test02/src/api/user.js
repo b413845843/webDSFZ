@@ -1,16 +1,9 @@
 import service from '@/tools/request.js';
 
-const baseUrl = '/users'
-const getAllUsersUrl = baseUrl + '/getAllUsers'
+const baseUrl = process.env.NODE_ENV === 'development' ? '/dev/users' : '/users'
+
 const loginUrl = baseUrl + '/login'
 const registerUrl = baseUrl + '/register'
-
-export function getAllUsers() {
-  return service({
-    url: getAllUsersUrl,
-    method: 'get'
-  });
-}
 
 export function login(user) {
   return service({

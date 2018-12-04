@@ -1,3 +1,4 @@
+/* eslint-disable */
 DROP DATABASE IF EXISTS dascom;
 
 CREATE DATABASE dascom;
@@ -5,3 +6,4 @@ CREATE DATABASE dascom;
 USE dascom;
 
 SOURCE ./user.sql;
+SOURCE ./printer.sql;

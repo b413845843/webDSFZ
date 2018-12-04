@@ -6,7 +6,6 @@
       </Button>
 
       <Poptip placement="left" @on-popper-show="fetchVersion" style="float:right;margin-right:10px;">
-
         <Button type="text">
           <Icon type="md-information-circle" size=14 /> 版本信息</Button>
         <div v-if="version" class="versionSpan" slot="content">
@@ -18,7 +17,6 @@
         <p v-else slot="content">获取数据...</p>
         <Spin size="large" fix v-if="versonFetching"></Spin>
       </Poptip>
-
     </Row>
 
     <Table stripe :columns="tableCols" :data="tableData" :loading="tableLoading" @on-filter-change="filterChange">
@@ -282,7 +280,7 @@
         filterValue: [],
         infoModal: false,
         infoNodes: [],
-        webVersion: '1.11.26.1'
+        webVersion: '1.12.4.1'
       };
     },
 

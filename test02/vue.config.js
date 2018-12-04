@@ -13,5 +13,16 @@ module.exports = {
         '@': resolve('src')
       }
     }
+  },
+  devServer: {
+    proxy: {
+      '/dev': {
+        target: 'http://localhost:8099',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/dev': '/'
+        }
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { setToken } from '@/lib/util'
+import { setToken, setUser } from '@/lib/util'
 import { login, register } from '@/api/user'
 // STATE
 const USER_NAME = 'userName'
@@ -10,7 +10,6 @@ const HANDLE_REGISTER = 'handleRegister'
 
 export default {
   state: {
-    userName: ''
   },
   mutations: {
     [USER_NAME](state, userName) {
@@ -22,11 +21,12 @@ export default {
     [HANDLE_LOGIN]({ commit }, { name, password }) {
       return new Promise((resolve, reject) => {
         login({ username: name, password: password }).then(res => {
-          if (res.data.msg !== 'ok') {
+          if (res.data.message !== 'ok') {
             reject(res.data)
           } else {
-            commit(USER_NAME, name)
-            setToken(res.token)
+            console.log(`登录成功 ${JSON.stringify(res)}`);
+            setToken(res.data.token)
+            setUser(name)
             resolve()
           }
         }).catch(err => {
@@ -37,19 +37,19 @@ export default {
     // 注销
     [HANDLE_LOGOUT]({ commit }) {
       return new Promise((resolve, reject) => {
-        commit(USER_NAME, '')
         setToken('')
+        setUser('')
         resolve()
       })
     },
     [HANDLE_REGISTER]({ commit }, { name, password, email }) {
       return new Promise((resolve, reject) => {
         register({ username: name, password: password, mail: email }).then(res => {
-          if (res.data.msg !== 'ok') {
+          if (res.data.message !== 'ok') {
             reject(res.data)
           } else {
-            commit(USER_NAME, name)
             setToken(res.token)
+            setUser(name)
             resolve()
           }
         }).catch(err => {

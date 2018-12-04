@@ -8,9 +8,6 @@ const pVersion = pBaseUrl + '/Version'
 const pConfig = pBaseUrl + '/DeviceCfg'
 const pSubmitJob = pBaseUrl + '/SubmitJob'
 
-/* eslint-disable */
-const dDeviceList = 'http://localhost:3000/printerInfo'
-
 export function submitJob(data) {
   return service({
     url: `${pSubmitJob}`,
@@ -73,16 +70,4 @@ export function editPrinter(info) {
     method: 'put',
     data: info
   })
-}
-
-/* eslint-disable */
-function sleep(numberMillis) {
-  var now = new Date();
-  var exitTime = now.getTime() + numberMillis;
-  while (true) {
-    now = new Date();
-    if (now.getTime() > exitTime) {
-      return;
-    }
-  }
 }
