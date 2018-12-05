@@ -11,8 +11,9 @@ const wxLogger = loggerFactory.getLogger('wx')
 const logPath = path.join(__dirname, '../log/logs/wx_file.log')
 
 const token = 'dascom666'
-const productID = 51504
+const productID = 51054
 const deviceIDUrl = 'https://api.weixin.qq.com/device/getqrcode'
+const tokenUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4943f6480a79a436&secret=13a6a97f36ad0badbbfcf5473875cb43'
 // 按行读取log文件
 function readFileToArr(fReadName, callback) {
   var fRead = fs.createReadStream(fReadName);
@@ -59,40 +60,65 @@ router.get('/', (req, res, next) => {
   }
 })
 
+router.get('/token', async (req, res, next) => {
+  try {
+    let api = await axios({
+      method: 'get',
+      url: tokenUrl
+    })
+    wxLogger.info(`获取access_token:${JSON.stringify(api.data)}`);
+    access_token = api.data.access_token
+
+    if (access_token) {
+      res.render('get_device_id', {
+        title: `获取access_token 成功`,
+        result: access_token
+      })
+    } else {
+      res.render('get_device_id', {
+        title: `获取access_token 失败`,
+        result: JSON.stringify(api.data)
+      })
+    }
+  } catch (err) {
+    res.render('get_device_id', {
+      title: '获取access_token失败',
+      result: JSON.stringify(err)
+    })
+  }
+})
+
 router.get('/deviceid', async (req, res, next) => {
   try {
-    let res_access_token = await axios({
+    let result = await axios({
       method: 'get',
-      url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4943f6480a79a436&secret=13a6a97f36ad0badbbfcf5473875cb43'
+      url: deviceIDUrl,
+      params: {
+        access_token: access_token,
+        product_id: productID
+      }
     })
-    console.log(res_access_token.data);
+    wxLogger.info(`获取deviceid:${JSON.stringify(result.data)}`);
+    const devID = result.data.deviceid
 
-    if (res_access_token.data.access_token) {
-      let access_token = res_access_token.data.access_token
-
-      let res_deviceid = await axios({
-        method: 'get',
-        url: decodeURI,
-        params: {
-          access_token: access_token,
-          product_id: productID
-        }
-      })
-      console.log(res_deviceid.data);
-
-      let message = JSON.stringify(res_deviceid.data)
+    if (devID) {
       res.render('get_device_id', {
-        title: `获取deviceid`,
-        result: JSON.stringify(api_token) + '  ' + message
-    })
+        title: `获取deviceid成功`,
+        result: devID
+      })
+    } else {
+      res.render('get_device_id', {
+        title: `获取deviceid失败`,
+        result: JSON.stringify(result.data)
+      })
     }
+
   } catch (err) {
     res.render('get_device_id', {
       title: '获取deviceid失败',
       result: JSON.stringify(err)
     })
   }
-  console.log('end');
 })
 
 // 读取log页面
