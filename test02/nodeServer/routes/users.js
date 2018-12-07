@@ -1,11 +1,19 @@
 var express = require('express');
 var router = express.Router();
-var userService = require('../database/userService')
+var userService = require('../services/userService')
+
+const loggerFactory = require('../log/log4js')
+const logger = loggerFactory.getLogger('login')
   /* GET users listing. */
-router.get('/getAllUsers', function(req, res, next) {
+router.get('/getAllUsers', async function(req, res, next) {
   console.log('响应/getAllUsers');
-  const users = userService.getAllUser()
-  res.send(users)
+  const result = await userService.getAllUsers()
+  if (!result.err) {
+    res.send(result)
+  } else {
+    logger.info(result.err)
+    res.status(400).send('服务器出错')
+  }
 });
 
 router.post('/login', async function(req, res, next) {

@@ -10,7 +10,8 @@ module.exports = {
     config.resolve = {
       extensions: ['.js', '.vue', '.json', '.css'],
       alias: {
-        '@': resolve('src')
+        '@': resolve('src'),
+        '_c': resolve('src/layout/iview/component')
       }
     }
   },

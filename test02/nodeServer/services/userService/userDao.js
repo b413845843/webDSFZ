@@ -1,4 +1,4 @@
-var pool = require('./db')
+var pool = require('../db.js')
 const table = 'user'
 
 const selectAll = `SELECT * FROM ${table}`
@@ -6,7 +6,7 @@ const selectByName = `SELECT * FROM ${table} where username = ?`
 const inserUser = `INSERT INTO ${table}(username,password,mail) VALUES(?,?,?)`
 
 let userDao = {
-  getAllUser() {
+  getAllUsers() {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, con) => {
         if (err) {

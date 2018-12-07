@@ -4,7 +4,7 @@ const baseUrl = process.env.NODE_ENV === 'development' ? '/dev/users' : '/users'
 
 const loginUrl = baseUrl + '/login'
 const registerUrl = baseUrl + '/register'
-
+const getAllUsersUrl = baseUrl + '/getAllUsers'
 export function login(user) {
   return service({
     url: loginUrl,
@@ -25,4 +25,11 @@ export function register(user) {
       'Content-Type': 'application/json'
     }
   });
+}
+
+export function getAllUsers() {
+  return service({
+    url: getAllUsersUrl,
+    method: 'get'
+  })
 }

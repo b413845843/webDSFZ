@@ -138,7 +138,7 @@
           }],
           passwordCheck: [{
               validator: validatePassCheck,
-              trigger: 'blur',
+              trigger: 'blur'
             },
             {
               required: true,

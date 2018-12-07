@@ -1,8 +1,8 @@
-var userDao = require('../database/userDao')
+var userDao = require('./userDao.js')
 var jwt = require('jsonwebtoken')
 
-const config = require('../config/jwt_config')
-const loggerFactory = require('../log/log4js')
+const config = require('../../config/jwt_config')
+const loggerFactory = require('../../log/log4js')
 
 const loginLogger = loggerFactory.getLogger('login')
 
@@ -14,9 +14,18 @@ function creaetToken (name, password) {
 }
 
 module.exports = {
+  // 原始数据
+  async getAllUsers() {
+    try {
+      return await userDao.getAllUsers()
+    } catch (error) {
+      return { err: error }
+    }
+  },
+  // 登录注销
   async login(username, password) {
     try {
-      let users = await userDao.getAllUser()
+      let users = await userDao.getAllUsers()
       if (users && users.length) {
         for (let i = 0; i < users.length; i++) {
           if (users[i].username === username && users[i].password === password) {

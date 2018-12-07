@@ -3,7 +3,7 @@ let PrinterInfoView = () => import('@/layout/iview/printer-info-view')
 let LoginView = () => import('@/layout/iview/login-view')
 let error404 = () => import('@/layout/iview/error-pages/404.vue')
 let error401 = () => import('@/layout/iview/error-pages/401.vue')
-
+let userManagerView = () => import('@/layout/iview/user-manager-view')
 const Foo = {
   template: '<div class="foo">foo</div>'
 }
@@ -30,6 +30,14 @@ export default [{
         component: PrinterInfoView,
         meta: {
           title: '首页'
+        }
+      },
+      {
+        path: 'usersManager',
+        name: 'usersManager',
+        component: userManagerView,
+        meta: {
+          title: '用户管理'
         }
       },
       {
