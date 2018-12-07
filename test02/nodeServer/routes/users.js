@@ -38,4 +38,14 @@ router.post('/register', async function(req, res, next) {
   res.send(msg)
 });
 
+router.post('/update', async function(req, res, next) {
+  let user = req.body
+
+  console.log(`${JSON.stringify(req.body)} 响应/update`);
+
+  const msg = await userService.update(user)
+  console.log(msg);
+
+  res.send(msg)
+});
 module.exports = router;

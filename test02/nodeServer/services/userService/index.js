@@ -63,5 +63,14 @@ module.exports = {
     } catch (error) {
       return { message: error.message, errcode: 2 }
     }
+  },
+  async update(user) {
+    try {
+      const result = await userDao.updateUser(user)
+      loginLogger.info(JSON.stringify(result))
+      return { message: `修改成功` }
+    } catch (error) {
+      return { message: '修改失败', errcode: 4 }
+    }
   }
 }
