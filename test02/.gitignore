@@ -2,6 +2,7 @@
 node_modules
 dist
 nodeServer/dist
+nodeServer/log/logs
 
 # local env files
 .env.local
