@@ -1,13 +1,13 @@
 .DS_Store
 node_modules
 dist
-nodeServer/dist
+# nodeServer/dist
 nodeServer/log/logs
 
 # local env files
 .env.local
 .env.*.local
-
+s
 # Log files
 npm-debug.log*
 yarn-debug.log*
