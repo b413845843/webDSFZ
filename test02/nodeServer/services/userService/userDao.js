@@ -4,6 +4,7 @@ const table = 'user'
 const selectAll = `SELECT * FROM ${table}`
 const selectByName = `SELECT * FROM ${table} where username = ?`
 const inserUser = `INSERT INTO ${table}(username,password,mail) VALUES(?,?,?)`
+const deleteUser = `DELETE FROM ${table} where id=?`
 // const updateUser = `UPDATE ${table} SET ?=? WHERE id=?`
 let userDao = {
   getAllUsers() {
@@ -87,6 +88,29 @@ let userDao = {
           } else {
             console.log(`--------------------------UPDATE USER----------------------------`);
             console.log(result);
+            console.log('------------------------------------------------------------\n\n');
+            resolve(result)
+          }
+          con.release()
+        })
+      })
+    })
+  },
+   deleteUserById(id) {
+     console.log(`id ${id.id}`);
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, con) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        con.query(deleteUser, [id.id], (err, result) => {
+          if (err) {
+            console.log(`[delete user] - ${err.message}`);
+            reject(err)
+          } else {
+            console.log(`--------------------------DELETE USER----------------------------`);
+            console.log('DELETE affectedRows', result.affectedRows);
             console.log('------------------------------------------------------------\n\n');
             resolve(result)
           }

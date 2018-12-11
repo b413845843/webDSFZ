@@ -7,7 +7,13 @@
 </template>
 
 <script>
-console.log(process.env.NODE_ENV);
+import { Message } from 'iview'
+
+Message.config({
+  top: 100,
+  duration: 3
+});
+
 export default {
   name: 'App'
 }

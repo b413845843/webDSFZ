@@ -7,6 +7,8 @@ const logger = loggerFactory.getLogger('login')
   /* GET users listing. */
 router.get('/getAllUsers', async function(req, res, next) {
   console.log('响应/getAllUsers');
+  console.log(req.user);
+  
   const result = await userService.getAllUsers()
   if (!result.err) {
     res.send(result)
@@ -15,15 +17,6 @@ router.get('/getAllUsers', async function(req, res, next) {
     res.status(400).send('服务器出错')
   }
 });
-
-router.post('/login', async function(req, res, next) {
-  let username = req.body.username
-  let password = req.body.password
-  console.log(`${JSON.stringify(req.body)} 响应/login`);
-
-  const msg = await userService.login(username, password)
-  res.send(msg)
-})
 
 router.post('/register', async function(req, res, next) {
   let username = req.body.username
@@ -48,4 +41,15 @@ router.post('/update', async function(req, res, next) {
 
   res.send(msg)
 });
+
+router.post('/delete', async function(req, res, next) {
+  let id = req.body
+
+  console.log(`${JSON.stringify(req.body)} 响应/delete`);
+
+  const msg = await userService.deleteUserById(id)
+  console.log(msg);
+
+  res.send(msg)
+})
 module.exports = router;

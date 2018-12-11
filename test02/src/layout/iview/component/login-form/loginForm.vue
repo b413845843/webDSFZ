@@ -162,9 +162,9 @@
         },
         ruser: {
           name: '',
-          password: '',
-          passwordCheck: '',
-          email: ''
+          password: '123',
+          passwordCheck: '123',
+          email: '123@qq.com'
         }
       };
     },

@@ -9,6 +9,7 @@ import store from '@/store'
 import 'nprogress/nprogress.css'
 
 import iView from 'iview'
+
 import 'iview/dist/styles/iview.css'
 
 import './index.less'

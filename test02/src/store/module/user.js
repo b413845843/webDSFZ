@@ -1,5 +1,5 @@
 import { setToken, setUser } from '@/lib/util'
-import { login, register } from '@/api/user'
+import userService from '@/api/user'
 // STATE
 const USER_NAME = 'userName'
 
@@ -20,7 +20,7 @@ export default {
     // 登陆
     [HANDLE_LOGIN]({ commit }, { name, password }) {
       return new Promise((resolve, reject) => {
-        login({ username: name, password: password }).then(res => {
+        userService.login({ username: name, password: password }).then(res => {
           if (res.data.message !== 'ok') {
             reject(res.data)
           } else {
@@ -44,7 +44,7 @@ export default {
     },
     [HANDLE_REGISTER]({ commit }, { name, password, email }) {
       return new Promise((resolve, reject) => {
-        register({ username: name, password: password, mail: email }).then(res => {
+        userService.register({ username: name, password: password, mail: email }).then(res => {
           if (res.data.message !== 'ok') {
             reject(res.data)
           } else {

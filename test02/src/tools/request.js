@@ -1,10 +1,28 @@
 import Axios from 'axios'
+import { getToken } from '@/lib/util'
 // import vm from '@/main'
 const service = Axios.create({
   timeout: 4000
 })
 
 export default service;
+service.interceptors.request.use(
+  config => {
+    if (config.url.indexOf('http://120.197.55.79:30003/') > -1) {
+
+    } else {
+      let token = getToken()
+      if (token) {
+        config.headers['Authorization'] = `token ${token}`
+        console.log(config);
+      }
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
 
 service.interceptors.response.use(
   response => {

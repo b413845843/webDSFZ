@@ -1,7 +1,12 @@
 <template>
   <Card id="printerInfo">
     <Row style="padding-bottom:10px">
-      <Button type="info" @click="fetchData">
+      <Select v-model="searchKey" style="width:100px">
+        <Option v-for="col in tableCols" :value="col.key" :key="col.key" v-if="col.search">{{col.title}}</Option>
+      </Select>
+      <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" style="width:200px;margin-left:4px" v-model="searchValue"/>
+      <Button type="info" @click="handleSearch" style="margin-left:2px"><Icon type="search"/>&nbsp;&nbsp;搜索</Button>
+      <Button type="info" @click="fetchData" style="margin-left:4px">
         <Icon type="md-refresh" size=16 /> 刷新列表
       </Button>
 
@@ -19,7 +24,7 @@
       </Poptip>
     </Row>
 
-    <Table stripe :columns="tableCols" :data="tableData" :loading="tableLoading" @on-filter-change="filterChange">
+    <Table stripe :columns="tableCols" :data="insideTableData" :loading="tableLoading">
     </Table>
 
     <Row>
@@ -88,6 +93,8 @@
           {
             title: '设备编码',
             key: 'Number',
+            search: true,
+            sortable: true,
             render: (h, params) => {
               return h(
                 'a', {
@@ -106,6 +113,8 @@
           {
             title: '型号',
             key: 'Model',
+            search: true,
+            sortable: true,
             render: (h, params) => {
               return h(
                 'a', {
@@ -124,6 +133,8 @@
           {
             title: '网络/状态',
             key: 'Status',
+            sortable: true,
+            search: true,
             minWidth: 80,
             render: (h, params) => {
               // const color = params.row.Status === 'Ready'?'success':'error'
@@ -146,15 +157,18 @@
           },
           {
             title: '接收缓存',
-            key: 'Received'
+            key: 'Received',
+            sortable: true
           },
           {
             title: '作业数',
-            key: 'Jobs'
+            key: 'Jobs',
+            sortable: true
           },
           {
             title: '心跳数',
-            key: 'Ticks'
+            key: 'Ticks',
+            sortable: true
           },
           {
             title: '操作',
@@ -255,6 +269,7 @@
           }]
         },
         tableData: [],
+        insideTableData: [],
         tableLoading: true,
         deleteModel: false,
         editeModel: false,
@@ -280,18 +295,22 @@
         filterValue: [],
         infoModal: false,
         infoNodes: [],
-        webVersion: '1.12.4.1'
-      };
+        webVersion: '1.12.10.1',
+        searchKey: '',
+        searchValue: ''
+      }
     },
-
     mounted() {
-      this.$Message.config({
-        top: 100,
-        duration: 2
-      });
       this.fetchData();
     },
-
+    watch: {
+      tableData (val) {
+        this.insideTableData = val.map(item => {
+          return item
+        })
+        this.handleSearch()
+      }
+    },
     methods: {
       configAction(action, status) {
         if (action === 'cancel') {
@@ -406,7 +425,7 @@
               let message = this.type === 'add' ? '添加' : '编辑';
               if (res.data === undefined) {
                 this.$Message.error({
-                  content: `错误 : ${err}`
+                  content: `错误`
                 })
               } else {
                 this.$Message.success({
@@ -428,8 +447,23 @@
       handleReset(name) {
         this.$refs[name].resetFields();
       },
-      filterChange(value) {
-        console.log(value)
+      handleClear (e) {
+        if (e.target.value === '') {
+          this.insideTableData = this.tableData.map(item => {
+          return item
+        })
+        }
+      },
+      handleSearch () {
+        this.insideTableData = this.tableData.filter(item => {
+          if (item[this.searchKey] && this.searchValue) {
+            const source = item[this.searchKey].toUpperCase()
+            const search = this.searchValue.toUpperCase()
+            return source.indexOf(search) > -1
+          } else {
+            return 1;
+          }
+        })
       }
     }
   };

@@ -6,7 +6,7 @@ const loggerFactory = require('../../log/log4js')
 
 const loginLogger = loggerFactory.getLogger('login')
 
-function creaetToken (name, password) {
+function createToken (name, password) {
   const token = jwt.sign({ name, password }, config.jwtsecret, {
     expiresIn: 60 * 60 * 24// 授权时效24小时
   })
@@ -29,7 +29,7 @@ module.exports = {
       if (users && users.length) {
         for (let i = 0; i < users.length; i++) {
           if (users[i].username === username && users[i].password === password) {
-            const token = creaetToken(username, password)
+            const token = createToken(username, password)
             loginLogger.info(`用户:${username} 进行了登录操作 token : ${token}`)
             return { token: token, message: 'ok' }
           }
@@ -54,7 +54,7 @@ module.exports = {
       } else {
         const id = await userDao.addUser(username, password, mail)
         if (id) {
-          const token = creaetToken(username, password)
+          const token = createToken(username, password)
           return { token: token, message: 'ok' }
         } else {
           return { message: '注册失败' }
@@ -71,6 +71,15 @@ module.exports = {
       return { message: `修改成功` }
     } catch (error) {
       return { message: '修改失败', errcode: 4 }
+    }
+  },
+  async deleteUserById(id) {
+    try {
+      const result = await userDao.deleteUserById(id)
+      loginLogger.info(JSON.stringify(result))
+      return { message: `删除成功` }
+    } catch (error) {
+      return { message: '删除失败', errcode: 4 }
     }
   }
 }
