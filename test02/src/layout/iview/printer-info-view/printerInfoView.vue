@@ -4,7 +4,7 @@
       <Select v-model="searchKey" style="width:100px">
         <Option v-for="col in tableCols" :value="col.key" :key="col.key" v-if="col.search">{{col.title}}</Option>
       </Select>
-      <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" style="width:200px;margin-left:4px" v-model="searchValue"/>
+      <Input @on-change="handleClear" @on-keydown="searchKeyDown" clearable placeholder="输入关键字搜索" style="width:200px;margin-left:4px" v-model="searchValue"/>
       <Button type="info" @click="handleSearch" style="margin-left:2px"><Icon type="search"/>&nbsp;&nbsp;搜索</Button>
       <Button type="info" @click="fetchData" style="margin-left:4px">
         <Icon type="md-refresh" size=16 /> 刷新列表
@@ -453,6 +453,10 @@
           return item
         })
         }
+      },
+      searchKeyDown (e) {
+        console.log(e);
+        if (e.key === 'Enter') this.handleSearch()
       },
       handleSearch () {
         this.insideTableData = this.tableData.filter(item => {

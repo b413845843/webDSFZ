@@ -22,7 +22,7 @@
     name: 'User',
     computed: {
       userName() {
-        return getUser()
+        return this.$store.state.user.remark + ' ' + getUser()
       }
     },
     methods: {

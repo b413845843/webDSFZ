@@ -29,10 +29,11 @@ let userService = {
       }
     });
   },
-  getAllUsers() {
+  getAllUsers(page) {
     return service({
       url: getAllUsersUrl,
-      method: 'get'
+      method: 'get',
+      params: page
     })
   },
   updateUser(user) {

@@ -6,8 +6,8 @@ const loggerFactory = require('../../log/log4js')
 
 const loginLogger = loggerFactory.getLogger('login')
 
-function createToken (name, password) {
-  const token = jwt.sign({ name, password }, config.jwtsecret, {
+function createToken (name, password, remark) {
+  const token = jwt.sign({ name, password, remark }, config.jwtsecret, {
     expiresIn: 60 * 60 * 24// 授权时效24小时
   })
   return token
@@ -17,7 +17,18 @@ module.exports = {
   // 原始数据
   async getAllUsers() {
     try {
-      return await userDao.getAllUsers()
+      let users = await userDao.getAllUsers()
+      let count = await userDao.usersCount()
+      return { users, count }
+    } catch (error) {
+      return { err: error }
+    }
+  },
+  async getUsersByPage(page) {
+    try {
+      let users = await userDao.getUsersByPage(page)
+      let count = await userDao.usersCount()
+      return { users, count }
     } catch (error) {
       return { err: error }
     }
@@ -29,9 +40,10 @@ module.exports = {
       if (users && users.length) {
         for (let i = 0; i < users.length; i++) {
           if (users[i].username === username && users[i].password === password) {
-            const token = createToken(username, password)
+            let remark = users[i].remark
+            const token = createToken(username, password, remark)
             loginLogger.info(`用户:${username} 进行了登录操作 token : ${token}`)
-            return { token: token, message: 'ok' }
+            return { token: token, message: 'ok', remark: remark }
           }
         }
       }
@@ -54,8 +66,8 @@ module.exports = {
       } else {
         const id = await userDao.addUser(username, password, mail)
         if (id) {
-          const token = createToken(username, password)
-          return { token: token, message: 'ok' }
+          const token = createToken(username, password, ' ')
+          return { token: token, message: 'ok', remark: '' }
         } else {
           return { message: '注册失败' }
         }

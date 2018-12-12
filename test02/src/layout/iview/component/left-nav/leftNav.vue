@@ -12,6 +12,7 @@
         </template>
         <MenuItem name="1-1" to="/home/">打印机</MenuItem>
       </Submenu>
+      <!-- v-if="$store.state.user.remark ==='管理员'" -->
       <Submenu name="2">
         <template slot="title">
           <Icon type="md-contact"></Icon>

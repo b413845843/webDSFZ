@@ -1,6 +1,7 @@
 <template>
   <Card>
-    <tables editable searchable search-place="top" v-model="users" :columns="cols" @on-cancel-edit="cancelEdit" @on-start-edit="startEdit" @on-save-edit="save" @on-delete="handleDelete"></tables>
+    <tables editable searchable search-place="top" v-model="users" :columns="cols" @on-cancel-edit="cancelEdit" @on-start-edit="startEdit" @on-save-edit="save" @on-delete="handleDelete" :max="pageSize"></tables>
+    <Page :total="userLen" size="small" show-elevator show-sizer :page-size-opts="pageSizeConf" :page-size="pageSize" :current="page" @on-page-size-change="sizeChange" @on-change="pageChange"/>
   </Card>
 </template>
 
@@ -17,8 +18,11 @@ export default {
   },
   data() {
     return {
-      tableData: [],
+      userLen: 0,
+      page: 1,
       users: [],
+      pageSizeConf: [5, 10, 15, 20],
+      pageSize: 5,
       cols: [{
         title: '用户名',
         key: 'username'
@@ -47,9 +51,21 @@ export default {
     }
   },
   methods: {
+    sizeChange(val) {
+      this.pageSize = val
+      this.fetchData()
+    },
+    pageChange(val) {
+      this.page = val
+      this.fetchData()
+    },
     fetchData() {
-      userService.getAllUsers().then(res => {
-        this.users = res.data
+      let page = { page: this.page, size: this.pageSize }
+      console.log(page)
+      userService.getAllUsers(page).then(res => {
+        console.log(res.data)
+        this.users = res.data.users
+        this.userLen = res.data.count
       }).catch(err => {
         this.$Message.error({
           content: `数据初始化失败 ${err}`
@@ -83,12 +99,12 @@ export default {
     async handleDelete(params) {
       console.log(params.row.id);
 
-      let res =  await userService.deleteUserById(params.row.id)
+      let res = await userService.deleteUserById(params.row.id)
       console.log(JSON.stringify(res));
 
       if (res.data.errcode) {
         this.$Message.error({
-          content: '删除失败'
+          content: `删除失败 ${res.data.message}`
           })
       } else {
         this.$Message.info({

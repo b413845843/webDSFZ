@@ -4,7 +4,7 @@
       <Select v-model="searchKey" class="search-col">
         <Option v-for="item in columns" v-if="item.key !== 'handle'" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
       </Select>
-      <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
+      <Input @on-change="handleClear" @on-keydown="searchKeyDown" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
       <Button @click="handleSearch" class="search-btn" type="primary"><Icon type="search"/>&nbsp;&nbsp;搜索</Button>
     </div>
     <Table
@@ -213,6 +213,10 @@ export default {
     },
     handleSearch () {
       this.insideTableData = this.value.filter(item => item[this.searchKey].indexOf(this.searchValue) > -1)
+    },
+    searchKeyDown (e) {
+      console.log(e);
+      if (e.key === 'Enter') this.handleSearch()
     },
     handleTableData () {
       this.insideTableData = this.value.map((item, index) => {

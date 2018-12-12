@@ -2,6 +2,7 @@ import { setToken, setUser } from '@/lib/util'
 import userService from '@/api/user'
 // STATE
 const USER_NAME = 'userName'
+const REMARK = 'remark'
 
 // ACTIONS
 const HANDLE_LOGIN = 'handleLogin'
@@ -10,10 +11,14 @@ const HANDLE_REGISTER = 'handleRegister'
 
 export default {
   state: {
+    remark: ''
   },
   mutations: {
     [USER_NAME](state, userName) {
       state.userName = userName
+    },
+    [REMARK](state, remark) {
+      state.remark = remark
     }
   },
   actions: {
@@ -27,6 +32,8 @@ export default {
             console.log(`登录成功 ${JSON.stringify(res)}`);
             setToken(res.data.token)
             setUser(name)
+            commit(REMARK, res.data.remark)
+            console.log(res.data.remark);
             resolve()
           }
         }).catch(err => {
@@ -39,6 +46,7 @@ export default {
       return new Promise((resolve, reject) => {
         setToken('')
         setUser('')
+        commit(REMARK, '')
         resolve()
       })
     },

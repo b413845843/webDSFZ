@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` VARCHAR(50) NOT NULL default '',
   `password` VARCHAR(50) NOT NULL default '',
   `mail` VARCHAR(50) NOT NULL default '',
-  `remark` VARCHAR(50) default ''
+  `remark` VARCHAR(50) default '普通用户'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT `user` ( username, password, remark, mail) values
