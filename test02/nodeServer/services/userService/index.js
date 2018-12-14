@@ -6,8 +6,8 @@ const loggerFactory = require('../../log/log4js')
 
 const loginLogger = loggerFactory.getLogger('login')
 
-function createToken (name, password, remark) {
-  const token = jwt.sign({ name, password, remark }, config.jwtsecret, {
+function createToken (name, password, remark, id) {
+  const token = jwt.sign({ name, password, remark, id }, config.jwtsecret, {
     expiresIn: 60 * 60 * 24// 授权时效24小时
   })
   return token
@@ -41,7 +41,8 @@ module.exports = {
         for (let i = 0; i < users.length; i++) {
           if (users[i].username === username && users[i].password === password) {
             let remark = users[i].remark
-            const token = createToken(username, password, remark)
+            let id = users[i].id
+            const token = createToken(username, password, remark, id)
             loginLogger.info(`用户:${username} 进行了登录操作 token : ${token}`)
             return { token: token, message: 'ok', remark: remark }
           }
@@ -66,8 +67,8 @@ module.exports = {
       } else {
         const id = await userDao.addUser(username, password, mail)
         if (id) {
-          const token = createToken(username, password, ' ')
-          return { token: token, message: 'ok', remark: '' }
+          const token = await this.login(username, password)
+          return { token: token.token, message: 'ok', remark: '' }
         } else {
           return { message: '注册失败' }
         }

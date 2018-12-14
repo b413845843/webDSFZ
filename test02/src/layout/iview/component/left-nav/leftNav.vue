@@ -21,6 +21,9 @@
         <MenuItem name="2-1" to="/usersManager">
           用户
         </MenuItem>
+        <MenuItem name="2-2" to="/chat">
+          聊天室
+        </MenuItem>
       </Submenu>
     </Menu>
 

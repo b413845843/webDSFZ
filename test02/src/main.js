@@ -5,7 +5,6 @@ import App from './App'
 import router from './router/'
 import i18n from '@/locale'
 import store from '@/store'
-
 import 'nprogress/nprogress.css'
 
 import iView from 'iview'

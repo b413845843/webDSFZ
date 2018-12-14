@@ -7,10 +7,9 @@ var app = require('../app');
 var debug = require('debug')('nodeserver:server');
 var http = require('http');
 var net = require('net')
-
+var chat = require('../chatSystem')
 var port = 0
 var server;
-
 // // 检测端口是否被占用
 function portIsOccupied(P) {
   // 创建服务并监听该端口
@@ -52,6 +51,7 @@ function start() {
 
   server = http.createServer(app);
 
+  chat.start(server)
   /**
    * Listen on provided port, on all network interfaces.
    */

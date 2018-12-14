@@ -1,8 +1,9 @@
-import { setToken, setUser } from '@/lib/util'
+import { setToken, setUser, getToken, getUser } from '@/lib/util'
 import userService from '@/api/user'
+import { getRemark, setRemark } from '../../lib/util';
 // STATE
-const USER_NAME = 'userName'
-const REMARK = 'remark'
+// const USER_NAME = 'userName'
+// const REMARK = 'remark'
 
 // ACTIONS
 const HANDLE_LOGIN = 'handleLogin'
@@ -11,15 +12,26 @@ const HANDLE_REGISTER = 'handleRegister'
 
 export default {
   state: {
-    remark: ''
+
+  },
+  getters: {
+     token: state => {
+       return getToken()
+     },
+     user: state => {
+       return getUser()
+     },
+     remark: state => {
+      return getRemark()
+     }
   },
   mutations: {
-    [USER_NAME](state, userName) {
-      state.userName = userName
-    },
-    [REMARK](state, remark) {
-      state.remark = remark
-    }
+    // [USER_NAME](state, userName) {
+    //   state.userName = userName
+    // },
+    // [REMARK](state, remark) {
+    //   state.remark = remark
+    // }
   },
   actions: {
     // 登陆
@@ -32,7 +44,7 @@ export default {
             console.log(`登录成功 ${JSON.stringify(res)}`);
             setToken(res.data.token)
             setUser(name)
-            commit(REMARK, res.data.remark)
+            setRemark(res.data.remark)
             console.log(res.data.remark);
             resolve()
           }
@@ -46,7 +58,7 @@ export default {
       return new Promise((resolve, reject) => {
         setToken('')
         setUser('')
-        commit(REMARK, '')
+        setRemark('')
         resolve()
       })
     },
@@ -58,6 +70,7 @@ export default {
           } else {
             setToken(res.data.token)
             setUser(name)
+            setRemark(res.data.remark)
             resolve()
           }
         }).catch(err => {

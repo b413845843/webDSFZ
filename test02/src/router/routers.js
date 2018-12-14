@@ -4,6 +4,7 @@ let LoginView = () => import('@/layout/iview/login-view')
 let error404 = () => import('@/layout/iview/error-pages/404.vue')
 let error401 = () => import('@/layout/iview/error-pages/401.vue')
 let userManagerView = () => import('@/layout/iview/user-manager-view')
+let chatView = () => import('@/layout/iview/chat-view')
 const Foo = {
   template: '<div class="foo">foo</div>'
 }
@@ -38,6 +39,14 @@ export default [{
         component: userManagerView,
         meta: {
           title: '用户管理'
+        }
+      },
+      {
+        path: 'chat',
+        name: 'chat',
+        component: chatView,
+        meta: {
+          title: '聊天室'
         }
       },
       {
