@@ -1,12 +1,13 @@
 import Cookies from 'js-cookie'
 
-const cookieExpires = 1
+const cookieExpires = 10
 
 export const TOKEN_KEY = 'token'
 export const USER_KEY = 'username'
 export const REMARK_KEY = 'remark'
 
 export const setToken = (token) => {
+  Cookies.set(TOKEN_KEY, '', { expires: cookieExpires || 1 })
   Cookies.set(TOKEN_KEY, token, { expires: cookieExpires || 1 })
 }
 

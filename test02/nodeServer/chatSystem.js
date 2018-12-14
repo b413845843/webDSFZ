@@ -15,13 +15,17 @@ var chatSys = {
     // middleware token验证
     io.use((socket, next) => {
       let token = socket.handshake.query.token;
+      console.log(`验证${token}`);
+
       try {
         var decoded = jwt.verify(token, config.jwtsecret);
         socket.user = decoded
         socket.join(this.rooms[0])
         this.addNewUser(socket)
+        console.log(`=>通过`);
         return next();
       } catch (err) {
+        console.log(`=>失败${JSON.stringify(err)}`);
         return next(new Error('authentication error'));
       }
     });

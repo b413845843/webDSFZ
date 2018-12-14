@@ -4,9 +4,9 @@
       <span>聊天室</span>
       <Button class="clearButton" @click="clearMessages">清空聊天</Button>
     </Row>
-    
+
     <div class="chat">
-      <div v-for="msg in messages" class="line">
+      <div v-for="(msg,index) in messages" :key="`${index} + ${msg.user} `" class="line">
         <Avatar style="color: #f56a00;background-color: #fde3cf">{{ msg.user }}</Avatar>
         <span class="msg">{{msg.message}}</span>
       </div>
@@ -20,6 +20,7 @@
 <script>
 import './chatView.less'
 import io from 'socket.io-client'
+import { getToken, getUer } from '@/lib/util'
 const serverUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:80' : 'http://149.28.58.202:80'
 export default {
   name: 'chatView',
@@ -39,16 +40,15 @@ export default {
   },
   methods: {
     socketStart() {
-      console.log('init socket');
+      console.log(`init socket: ${getToken()}`);
       try {
         this.socket = io(serverUrl, {
           query: {
-            token: this.$store.getters.token
+            token: getToken()
           }
         })
 
         this.socket.on('connect', function() {
-          
         });
 
         this.socket.on('newMessage', function(data) {
@@ -66,12 +66,12 @@ export default {
     },
     sendMessage: function() {
       if (this.text !== '') {
-        console.log(`server:${serverUrl} ${this.$store.getters.user} send message`);
+        console.log(`server:${serverUrl} ${ getUer() } send message`);
         this.socket.emit('newMessage', { message: this.text })
         this.text = ''
       }
     },
-    clearMessages (){
+    clearMessages () {
       console.log('clear');
 
       this.messages = []

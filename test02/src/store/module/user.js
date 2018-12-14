@@ -14,17 +14,6 @@ export default {
   state: {
 
   },
-  getters: {
-     token: state => {
-       return getToken()
-     },
-     user: state => {
-       return getUser()
-     },
-     remark: state => {
-      return getRemark()
-     }
-  },
   mutations: {
     // [USER_NAME](state, userName) {
     //   state.userName = userName
@@ -41,7 +30,7 @@ export default {
           if (res.data.message !== 'ok') {
             reject(res.data)
           } else {
-            console.log(`登录成功 ${JSON.stringify(res)}`);
+            console.log(`登录成功 ${JSON.stringify(res.data.token)}`);
             setToken(res.data.token)
             setUser(name)
             setRemark(res.data.remark)
