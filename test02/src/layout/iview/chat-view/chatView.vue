@@ -2,7 +2,9 @@
   <Card class="warp">
     <Row type="flex" justify="space-between" align="middle">
       <Col>
-        <h4>聊天室</h4>
+        <Tag type="dot" :color="tagColor">
+          聊天室 <span>当前:{{ chatRoomUsersCount }}人</span>
+        </Tag> 
       </Col>
       <Col>
         <Button class="clearButton" @click="clearMessages" size="small">清空聊天</Button>
@@ -30,6 +32,10 @@ import './chatView.less'
 import io from 'socket.io-client'
 import { getToken, getUser } from '@/lib/util'
 const serverUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:80' : 'http://149.28.58.202:80'
+
+const USER_ENTER_LEAV = 'userEnterOrLeave'
+const LS_MESSAGES = 'messages'
+
 export default {
   name: 'chatView',
   mounted() {
@@ -37,8 +43,8 @@ export default {
     this.user = getUser()
     
     
-    if (localStorage.getItem('messages')) {
-      var msgs = JSON.parse(localStorage.getItem('messages'))
+    if (localStorage.getItem(LS_MESSAGES)) {
+      var msgs = JSON.parse(localStorage.getItem(LS_MESSAGES))
       this.messages = msgs
     } else {
       this.messages = []
@@ -51,14 +57,22 @@ export default {
   destroyed() {
     console.log('离开chat');
     this.socket.close()
-    localStorage.setItem('messages', JSON.stringify(this.messages))
+    localStorage.setItem(LS_MESSAGES, JSON.stringify(this.messages))
   },
   data() {
     return {
       socket: null,
       messages: [],
       text: '',
-      user: ''
+      user: '',
+      chatRoomUsersCount: 0,
+      tips: '',
+      conState: false
+    }
+  },
+  computed: {
+    tagColor (){
+      return this.conState ? 'success' : 'error'
     }
   },
   methods: {
@@ -72,7 +86,27 @@ export default {
         })
 
         this.socket.on('connect', function() {
-        });
+          this.conState = true
+        }.bind(this));
+
+        this.socket.on(USER_ENTER_LEAV, function(data) {
+          let tips = ''
+          if (data.type === 0) {
+            console.log(`进来 ${JSON.stringify(data)}`)
+            
+            tips = `${data.user} 进入聊天室`
+          } else {
+            console.log(`离开 ${JSON.stringify(data)}`)
+            tips = `${data.user} 离开聊天室`
+          }
+
+          this.chatRoomUsersCount = data.count
+          if (data.user !== this.user) {
+            this.$Message.info({
+              content: tips
+            })
+          }
+        }.bind(this));
 
         this.socket.on('newMessage', function(data) {
           console.log(`${this.user} recevice message :`);
@@ -80,13 +114,14 @@ export default {
           this.messages.push(data);
           this.$nextTick(() => {
             console.log('chat dom更新了');
+            console.log(`${this.chatRoomUsersCount}`)
             this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
           })
         }.bind(this));
 
         this.socket.on('disconnect', function() {
-
-        });
+          this.conState = false
+        }.bind(this));
       } catch (error) {
         console.log(error);
       }

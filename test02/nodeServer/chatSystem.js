@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken')
 var config = require('./config/jwt_config')
 var io;
 
+const USER_ENTER_LEAV = 'userEnterOrLeave'
+
 var chatSys = {
     users: [],
     rooms: ['hello'],
@@ -21,7 +23,7 @@ var chatSys = {
                 var decoded = jwt.verify(token, config.jwtsecret);
                 socket.user = decoded
                 socket.join(this.rooms[0])
-                this.addNewUser(socket)
+
                 console.log(`=>通过`);
                 return next();
             } catch (err) {
@@ -31,8 +33,9 @@ var chatSys = {
         });
 
         io.sockets.on('connection', socket => {
-            console.log(`新客户端连接: ${socket.user.name}`);
-            socket.emit('userEnter', { usersCount: this.users.length })
+            this.addNewUser(socket.user)
+            console.log(`新客户端连接 共(${this.users.length}): ${socket.user.name}`);
+            io.sockets.in(this.rooms[0]).emit(USER_ENTER_LEAV, { type: 0, user: socket.user.name, count: this.users.length });
 
             socket.on('newMessage', data => {
                 console.log(`收到用户(${socket.user.name}) 信息 :${data.message}`);
@@ -42,12 +45,18 @@ var chatSys = {
             })
 
             socket.on('disconnect', () => {
-                this.users = this.users.filter(item => {
-                    if (item === socket) {
-                        console.log(`${socket.user.name}:连接断开`);
-                        return false
+                console.log(`${socket.user.name}:连接断开前 共(${this.users.length})`);
+
+                for (let index = 0; index < this.users.length; index++) {
+                    const user = this.users[index];
+                    if (user === socket.user) {
+                        this.users.splice(index, 1)
+                        break
                     }
-                })
+                }
+
+                io.sockets.in(this.rooms[0]).emit(USER_ENTER_LEAV, { type: 1, user: socket.user.name, count: this.users.length });
+                console.log(`${socket.user.name}:连接断开 剩(${ this.users.length })`);
             })
         })
     }
