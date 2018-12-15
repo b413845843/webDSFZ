@@ -10,8 +10,8 @@
           <user></user>
         </top-header>
       </Header>
-      <Layout style="padding:20px;overflow:auto">
-        <Content>
+      <Layout style="padding:20px;overflow:auto;height:100%">
+        <Content style="height:100%">
           <router-view></router-view>
         </Content>
       </Layout>

@@ -11,38 +11,39 @@ const LOGIN_PAGE_NAME = 'login'
 Vue.use(Router)
 
 let router = new Router({
-  mode: 'history',
-  routes
+    mode: 'history',
+    routes
 })
 
 router.beforeEach((to, from, next) => {
-  NProgress.start()
+    NProgress.start()
 
-  const token = getToken()
-  // console.log(to);
+    const token = getToken()
+        // console.log(to);
 
-  // console.log(`to:${to.name} name:${store.state.user.userName} token:${token}`);
-  if (!token && to.name !== LOGIN_PAGE_NAME) {
-    console.log('没登录且不是登录页面 正在跳转到login');
-    next({ name: LOGIN_PAGE_NAME })
-  } else if (!token && to.name === LOGIN_PAGE_NAME) {
-    console.log('正在跳转到login');
-    next()
-  } else if (token && to.name === LOGIN_PAGE_NAME) {
-    console.log('正在跳转到home');
-    next({ name: 'home' })
-  } else {
-    if (token) {
-      next()
+    // console.log(`to:${to.name} name:${store.state.user.userName} token:${token}`);
+    if (!token && to.name !== LOGIN_PAGE_NAME) {
+        console.log('没登录且不是登录页面 正在跳转到login');
+        next({ name: LOGIN_PAGE_NAME })
+    } else if (!token && to.name === LOGIN_PAGE_NAME) {
+        console.log('正在跳转到login');
+        localStorage.setItem('messages', '')
+        next()
+    } else if (token && to.name === LOGIN_PAGE_NAME) {
+        console.log('正在跳转到home');
+        next({ name: 'home' })
     } else {
-      next({ name: 'error_404', replace: true })
+        if (token) {
+            next()
+        } else {
+            next({ name: 'error_404', replace: true })
+        }
     }
-  }
 })
 
 router.afterEach(() => {
-  console.log('跳转结束');
-  NProgress.done()
+    console.log('跳转结束');
+    NProgress.done()
 })
 
 export default router
