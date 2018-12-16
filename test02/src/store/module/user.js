@@ -49,6 +49,7 @@ export default {
                 setUser('')
                 setRemark('')
                 resolve()
+                localStorage.setItem('messages', '')
                 console.log('注销' + localStorage.getItem('messages'))
             })
         },

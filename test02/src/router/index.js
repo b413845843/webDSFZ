@@ -27,7 +27,6 @@ router.beforeEach((to, from, next) => {
         next({ name: LOGIN_PAGE_NAME })
     } else if (!token && to.name === LOGIN_PAGE_NAME) {
         console.log('正在跳转到login');
-        localStorage.setItem('messages', '')
         next()
     } else if (token && to.name === LOGIN_PAGE_NAME) {
         console.log('正在跳转到home');

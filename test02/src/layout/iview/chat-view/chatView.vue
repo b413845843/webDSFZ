@@ -57,7 +57,6 @@ export default {
   destroyed() {
     console.log('离开chat');
     this.socket.close()
-    localStorage.setItem(LS_MESSAGES, JSON.stringify(this.messages))
   },
   data() {
     return {
@@ -112,6 +111,7 @@ export default {
           console.log(`${this.user} recevice message :`);
           console.log(data);
           this.messages.push(data);
+          localStorage.setItem(LS_MESSAGES, JSON.stringify(this.messages))
           this.$nextTick(() => {
             console.log('chat dom更新了');
             console.log(`${this.chatRoomUsersCount}`)
