@@ -42,7 +42,6 @@ export default {
     this.socketStart()
     this.user = getUser()
     
-    
     if (localStorage.getItem(LS_MESSAGES)) {
       var msgs = JSON.parse(localStorage.getItem(LS_MESSAGES))
       this.messages = msgs
@@ -65,7 +64,6 @@ export default {
       text: '',
       user: '',
       chatRoomUsersCount: 0,
-      tips: '',
       conState: false
     }
   },
