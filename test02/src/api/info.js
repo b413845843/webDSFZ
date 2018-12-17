@@ -43,7 +43,7 @@ export function getPrinterList() {
 
 export function getPrinterInfo(number, type) {
   return service({
-    url: `${pDeviceInfo}?number=${number}&type=${type}`,
+    url: `${pDeviceInfo}?number=${number}&infoType=${type}`,
     method: 'get'
   });
 }
