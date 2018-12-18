@@ -5,6 +5,7 @@ let error404 = () => import('@/layout/iview/error-pages/404.vue')
 let error401 = () => import('@/layout/iview/error-pages/401.vue')
 let userManagerView = () => import('@/layout/iview/user-manager-view')
 let chatView = () => import('@/layout/iview/chat-view')
+let pdfPreView = () => import('@/layout/iview/pdf-preview')
 const Foo = {
   template: '<div class="foo">foo</div>'
 }
@@ -47,6 +48,14 @@ export default [{
         component: chatView,
         meta: {
           title: '聊天室'
+        }
+      },
+      {
+        path: 'pdf',
+        name: 'pdf',
+        component: pdfPreView,
+        meta: {
+          title: 'pdf'
         }
       },
       {

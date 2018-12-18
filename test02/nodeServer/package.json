@@ -17,12 +17,15 @@
     "express-rate-limit": "^3.3.2",
     "fs": "0.0.1-security",
     "http-errors": "~1.6.2",
+    "http-proxy-middleware": "^0.19.1",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.4.0",
     "log4js": "^3.0.6",
     "morgan": "~1.9.0",
     "multer": "^1.4.1",
     "mysql": "^2.16.0",
+    "pdf-text-extract": "^1.5.0",
+    "pdf.js-extract": "^0.1.1",
     "sha1": "^1.1.1",
     "socket.io": "^2.2.0"
   }

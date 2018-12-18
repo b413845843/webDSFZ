@@ -24,6 +24,16 @@
         <MenuItem name="2-2" to="/chat">
           聊天室
         </MenuItem>
+        
+      </Submenu>
+      <Submenu name="3">
+        <template slot="title">
+          <Icon type="ios-document" />
+          文件预览
+        </template>
+        <MenuItem name="2-3" to="/pdf">
+          pdf
+        </MenuItem>
       </Submenu>
     </Menu>
 

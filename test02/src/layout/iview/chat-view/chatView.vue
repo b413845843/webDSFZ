@@ -17,27 +17,56 @@
           <Avatar style="color: #f56a00;background-color: #fde3cf">{{ msg.user }}</Avatar>
         </Col>
         <Col :order="msg.user === user ? 0 : 1">
-          <span class="msg">{{msg.message}}</span>
+          <p v-html="msg.message.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)" class="msg"></p>
         </Col>
       </Row>
     </div>
-    <Input placeholder="输入些东西..." v-model="text" @on-enter="sendMessage">
-       <Button slot="append" type="primary" @click="sendMessage">发送</Button>
-    </Input>
+    <!-- <ButtonGroup> -->
+      <CheckboxGroup v-model="theContacts">@ 
+        <Checkbox v-for="(user,index) in contacts" :key="index" :label="user.name"></Checkbox>
+      </CheckboxGroup>
+
+      <Row type="flex" justify="space-between" :gutter="20">
+        <Col span="20">
+          <Input placeholder="输入些东西..." v-model="text" @on-enter="sendMessage" @on-change="change">
+          
+          <Poptip placement="top" width="400" slot="append">
+              <Button><Icon type="ios-outlet" size="20" /></Button>
+                <emotion :height="200" @emotion="handleEmotion" slot="content"></emotion>
+            </Poptip>
+          </Input>
+        </Col>
+        <Col span="2">
+          <Button type="primary" @click="sendMessage">发送</Button>
+        </Col>
+        <Col span="2">
+          <Button type="primary" @click="sendMessageDingDing">钉钉</Button>
+        </Col>
+      </Row>
+      
+      
+    <!-- </ButtonGroup> -->
+    
+    
+    
   </Card>
 </template>
 
 <script>
 import './chatView.less'
+import Emotion from '_c/emotion'
 import io from 'socket.io-client'
+import axios from 'axios'
 import { getToken, getUser } from '@/lib/util'
 const serverUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:80' : 'http://149.28.58.202:80'
+const dingdingUrl = process.env.NODE_ENV === 'development' ? '/ding/robot/send?access_token=c36a71fce0a28ed3b9b3c85a93a34845534c92a6cad1d4b3ee6409ad7366dac5' : 'ding/robot/send?access_token=c36a71fce0a28ed3b9b3c85a93a34845534c92a6cad1d4b3ee6409ad7366dac5'
 
 const USER_ENTER_LEAV = 'userEnterOrLeave'
 const LS_MESSAGES = 'messages'
 
 export default {
   name: 'chatView',
+  components: { Emotion },
   mounted() {
     this.socketStart()
     this.user = getUser()
@@ -50,7 +79,6 @@ export default {
     }
     this.$nextTick(() => {
       console.log('chat dom更新了');
-      this.$refs.chat.scrollTop = this.$refs.chat.scrollHeight
     })
   },
   destroyed() {
@@ -64,7 +92,26 @@ export default {
       text: '',
       user: '',
       chatRoomUsersCount: 0,
-      conState: false
+      conState: false,
+      contacts: [
+        {
+          name: '莹莹',
+          number: 15812450271
+        },
+        {
+          name: '罗桂梅',
+          number: 13725274502
+        },
+        {
+          name: '霍工',
+          number: 15975322483
+        },
+        {
+          name: 'cgb',
+          number: 18122752153
+        }
+        ],
+        theContacts: []
     }
   },
   computed: {
@@ -73,6 +120,12 @@ export default {
     }
   },
   methods: {
+    emotion (res) {
+      let word = res.replace(/\#|\;/gi,'')
+      const list = ['微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴', '睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过', '酷', '冷汗', '抓狂', '吐', '偷笑', '可爱', '白眼', '傲慢', '饥饿', '困', '惊恐', '流汗', '憨笑', '大兵', '奋斗', '咒骂', '疑问', '嘘', '晕', '折磨', '衰', '骷髅', '敲打', '再见', '擦汗', '抠鼻', '鼓掌', '糗大了', '坏笑', '左哼哼', '右哼哼', '哈欠', '鄙视', '委屈', '快哭了', '阴险', '亲亲', '吓', '可怜', '菜刀', '西瓜', '啤酒', '篮球', '乒乓', '咖啡', '饭', '猪头', '玫瑰', '凋谢', '示爱', '爱心', '心碎', '蛋糕', '闪电', '炸弹', '刀', '足球', '瓢虫', '便便', '月亮', '太阳', '礼物', '拥抱', '强', '弱', '握手', '胜利', '抱拳', '勾引', '拳头', '差劲', '爱你', 'NO', 'OK', '爱情', '飞吻', '跳跳', '发抖', '怄火', '转圈', '磕头', '回头', '跳绳', '挥手', '激动', '街舞', '献吻', '左太极', '右太极']
+      let index = list.indexOf(word)
+      return `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${index}.gif" align="middle">`   
+    },
     socketStart() {
       console.log(`init socket: ${getToken()}`);
       try {
@@ -131,10 +184,54 @@ export default {
         this.text = ''
       }
     },
+    sendMessageDingDing () {
+      let to = this.contacts.filter(user => {
+        console.log(user.name);
+        console.log(this.theContacts.indexOf(user.name));
+        
+        return this.theContacts.indexOf(user.name) >= 0
+      }).map( user => {
+        return user.number
+      })
+      console.log(to);
+      
+      let data = {
+          'msgtype': 'text', 
+          'text': {
+              'content': this.text
+          },
+          'at': {
+            'atMobiles': to,
+            'isAtAll': false
+          }
+      }
+      axios.post(dingdingUrl, data ,
+      {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => {
+        this.text = ''
+      }).catch(err => {
+        this.$Message.error({
+          content: `发送失败 ${err}`
+        })
+      })
+    },
     clearMessages () {
       console.log('clear');
 
       this.messages = []
+    },
+    handleEmotion(emoji) {
+      this.text += emoji
+    },
+    change(e) {
+      console.log(e);
+      if (e === '@') {
+        
+      }
+      
     }
   }
 }

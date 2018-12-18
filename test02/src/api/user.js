@@ -9,6 +9,21 @@ const updateUserUrl = baseUrl + '/update'
 const deleteUserUrl = baseUrl + '/delete'
 
 let userService = {
+  dingding(message) {
+    return service({
+      url: '/ding/robot/send?access_token=c36a71fce0a28ed3b9b3c85a93a34845534c92a6cad1d4b3ee6409ad7366dac5',
+      method: 'post',
+      data: {
+        'msgtype': 'text',
+        'text': {
+            'content': message
+        }
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  },
   login(user) {
     return service({
       url: loginUrl,

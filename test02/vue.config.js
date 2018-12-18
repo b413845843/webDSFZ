@@ -23,6 +23,13 @@ module.exports = {
         pathRewrite: {
           '^/dev': '/'
         }
+      },
+      'ding': {
+        target: 'https://oapi.dingtalk.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/ding': '/'
+        }
       }
     }
   },

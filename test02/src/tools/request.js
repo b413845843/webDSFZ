@@ -8,8 +8,8 @@ const service = Axios.create({
 export default service;
 service.interceptors.request.use(
   config => {
-    if (config.url.indexOf('http://120.197.55.79:30003/') > -1) {
-
+    if (config.url.indexOf('http://120.197.55.79:30003/') > -1 || config.url.indexOf('https://oapi.dingtalk.com/') > -1) {
+      config.headers['Content-Type'] = 'application/json'
     } else {
       let token = getToken()
       if (token) {
