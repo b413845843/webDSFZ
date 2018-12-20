@@ -7,7 +7,7 @@
       <RadioGroup v-model="printType" style="padding-left:10px;display: table-cell; vertical-align: middle;">
         <span>打印类型 : </span>
         <Radio label="图片"></Radio>
-        <Radio label="文本"></Radio>
+        <Radio label="指令"></Radio>
         <Radio label="16进制指令"></Radio>
       </RadioGroup>
     </Row>
@@ -24,12 +24,18 @@
         </div>
       </Card>
     </Row>
+    <Row v-else-if="printType === '指令'">
+      <Select v-model="currentCmd" style="margin-top:4px">
+        <Option v-for="item in cmdList" :label="item.cmd" :value="item.cmd">{{ item.cmd }}</Option>
+      </Select>
+      <p>{{ cmdDataType }}</p> 
+    </Row>
     <Row v-else>
 
       <Form :label-width="40">
         <Divider dashed />
         <FormItem label="内容" class="formitemMargin">
-          <Input v-model="sendData.content"></Input>
+          <Input v-model="content"></Input>
         </FormItem>
       </Form>
     </Row>
@@ -66,7 +72,7 @@
         <Divider dashed />
         <Col span=12>
         <FormItem label="数据类型" style="width:95%;" class="formitemMargin">
-          <Select v-model="sendData.dataFmt">
+          <Select v-model="dataFmt">
             <Option value="img">img</Option>
             <Option value="text">text</Option>
             <Option value="dat">dat</Option>
@@ -75,7 +81,7 @@
         </Col>
         <Col span=12>
         <FormItem label="数据内容编码" style="width:95%;" class="formitemMargin">
-          <Select v-model="sendData.encodeType">
+          <Select v-model="encodeType">
             <Option value="string">string</Option>
             <Option value="base64">base64</Option>
             <Option value="hex">hex</Option>
@@ -89,7 +95,7 @@
         <Divider dashed />
         <Col span=12>
         <FormItem label="作业数据类型" style="width:95%;" class="formitemMargin">
-          <Select v-model="sendData.jobType">
+          <Select v-model="jobType">
             <Option value="print">print</Option>
             <Option value="control">control</Option>
             <Option value="config">config</Option>
@@ -99,7 +105,7 @@
         </Col>
         <Col span=12>
         <FormItem label="目标设备" style="width:95%;" class="formitemMargin">
-          <Select v-model="sendData.devType">
+          <Select v-model="devType">
             <Option value="wifi">wifi</Option>
             <Option value="device">device</Option>
           </Select>
@@ -128,7 +134,8 @@
     Base64
   } from 'js-base64';
   import {
-    submitJob
+    submitJob,
+    getPrinterInfo
   } from '@/api/info'
 
   export default {
@@ -166,6 +173,34 @@
     watch: {
       show: function () {
         this.msg = this.imageName = this.imageSource = ''
+      },
+      printType() {
+        if (this.printType === '指令') {
+           this.fetchInfo()
+        } else if (this.printType === '16进制指令') {
+          this.encodeType = 'hex'
+        }
+      },
+      devType() {
+        if (this.printType === '指令') {
+           this.fetchInfo()
+        }
+      },
+      currentCmd() {
+        this.cmdList.forEach(item => {
+          if (item.cmd === this.currentCmd) {
+            if(item.Param.DataType) {
+              this.cmdDataType = item.Param.DataType
+            } else {
+              for (const key in item.Param) {
+                if (item.Param[key]['DataType']) {
+                  const element = object[key];
+                  
+                }
+              }
+            }
+          }
+        });
       }
     },
     data() {
@@ -174,26 +209,36 @@
         wod: true,
         printType: '图片',
         content: '10170000',
+        devType: 'wifi',
+        dataFmt: 'dat',
+        encodeType: 'hex',
+        jobType: 'control',
+        content: '10170000',
         sendData: {
-          dataFmt: 'dat',
-          devType: 'wifi',
-          encodeType: 'hex',
-          jobType: 'control',
-          content: '10170000'
+          // dataFmt: 'dat',
+          // encodeType: 'hex',
+          // jobType: 'control',
+          // content: '10170000'
         },
         imageSource: '',
         imageName: '',
         isLoading: false,
-        msg: ''
+        msg: '',
+        cmdList: [],
+        cmdDataType: '',
+        currentCmd: ''
       }
     },
     methods: {
       async actionOK() {
         console.log(this.printType);
+
         this.isLoading = true
         this.msg = ''
         if (this.printType === '图片') {
           this.sendData.datas = this.imageSource
+        } else if (this.printType === '指令') {
+          this.sendData.datas = `${this.currentCmd}.Param=undefined`
         } else {
           //  文本或者是hex
           if (this.sendData.encodeType === 'base64') {
@@ -210,8 +255,30 @@
 
         this.$emit('action', 'ok')
         this.showPrint = true
-
+        this.sendData.devType = this.devType
+        this.sendData.dataFmt = this.dataFmt
+        this.sendData.jobType = this.jobType
+        this.sendData.encodeType = this.encodeType
+        this.sendData.content = this.content
         await submitJob(this.sendData).then(res => {
+          if (this.printType === '指令') {
+            console.log(res);
+            
+            const subNode = res.data[this.currentCmd]['Reply Info']
+              // const value = subNode.NodeVal;
+              //如果是IP等格式
+              // if (subNode.DataType === 'data') {
+              //   value = ''
+              //   subNode.NodeVal.split('.').forEach(e => {
+              //     let num = parseInt(e, 10).toString(16)
+              //     num = PrefixInteger(num, 2)
+              //     value += num
+              //   })
+              // }
+              // this.msg = `Reply info:${value}`
+          } else {
+            this.msg = res.data
+          }
           this.msg = res.data
         }).catch(err => {
           console.log(err);
@@ -259,6 +326,24 @@
       },
       F_Open_dialog() {
         document.getElementById('btn_file').click();
+      },
+      async fetchInfo() {
+        const res = await getPrinterInfo(this.number,3 ,this.devType)
+           this.cmdList = []
+           this.currentCmd = ''
+           console.log(res.data);
+            this.dataFmt = 'dat'
+            this.encodeType = 'string'
+            for (const key in res.data) {
+              if (res.data.hasOwnProperty(key)) {
+                let item = res.data[key]
+                item.cmd = key
+                this.cmdList.push(res.data[key])
+                console.log();
+                                
+              }
+            }
+            console.log(this.cmdList);
       }
     }
   }

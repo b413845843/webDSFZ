@@ -24,6 +24,23 @@ router.get('/getAllUsers', async function (req, res, next) {
   }
 });
 
+router.get('/getUserInfo', async (req, res) => {
+  console.log('响应/getUserInfo');
+  console.log(req.user)
+  let msg = await userService.getUserByname(req.user.name)
+  console.log(`>>>>>>>>> ${msg.msg}`)
+  let friends = await userService.getFriendsList(req.user.id)
+  console.log(`${JSON.stringify(friends)}`)
+  if (friends.length) {
+    friends = friends.map(f => {
+      return f.fid
+    })
+    friends = await userService.getUserByIds(friends)
+    msg.friends = friends
+  }
+  res.json(msg)
+})
+
 router.post('/register', async function (req, res, next) {
   let username = req.body.username
   let password = req.body.password
@@ -60,5 +77,61 @@ router.post('/delete', async function (req, res, next) {
 
     res.send(msg)
   }
+})
+
+router.post('/makeFriend', async function (req, res, next) {
+  console.log(`${JSON.stringify(req.body)} 响应/makeFriend`);
+  let uid = req.body.uid
+  let fid = req.body.fid
+  const msg = await userService.makeFriend(uid, fid)
+  console.log(msg);
+  res.send(msg)
+})
+
+router.post('/deleteFriend', async function (req, res, next) {
+  console.log(`${JSON.stringify(req.body)} 响应/deleteFriend`);
+  let uid = req.body.uid
+  let fid = req.body.fid
+  const msg = await userService.deleteFriend(uid, fid)
+  console.log(msg);
+  res.send(msg)
+})
+
+router.post('/getFriendsList', async function (req, res, next) {
+  console.log(`${JSON.stringify(req.body)} 响应/getFriend`);
+  let uid = req.user.id
+  const msg = await userService.getFriendsList(uid)
+  console.log(msg);
+  res.send(msg)
+})
+
+// 打印机
+router.post('/addPrinter', (req, res) => {
+  console.log(`${JSON.stringify(req.body)} 响应/addPrinter`);
+  const printer = req.body
+  userService.addPrinter(printer, (msg) => {
+    res.send(msg)
+  }, (msg) => {
+    res.send(msg)
+  })
+})
+
+router.get('/getAllPrinters', (req, res) => {
+  console.log(`响应/getAllPrinters`);
+  userService.getAllPrinters((msg) => {
+    res.send(msg)
+  }, (msg) => {
+    res.send(msg)
+  })
+})
+
+router.post('/deletePrinter', (req, res) => {
+  console.log(`响应/getAllPrinters`);
+  const printer = req.body
+  userService.deletePrinter(printer, (msg) => {
+    res.send(msg)
+  }, (msg) => {
+    res.send(msg)
+  })
 })
 module.exports = router;

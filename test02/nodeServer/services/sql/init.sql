@@ -7,3 +7,5 @@ USE dascom;
 
 SOURCE ./user.sql;
 SOURCE ./printer.sql;
+SOURCE ./friendShip.sql;
+SOURCE ./group.sql;

@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS `user_printer` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `uid` int NOT NULL ,
+  `pid` int NOT NULL 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;

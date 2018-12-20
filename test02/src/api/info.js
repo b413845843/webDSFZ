@@ -41,9 +41,9 @@ export function getPrinterList() {
   });
 }
 
-export function getPrinterInfo(number, type) {
+export function getPrinterInfo(number, type, deviceType) {
   return service({
-    url: `${pDeviceInfo}?number=${number}&infoType=${type}`,
+    url: `${pDeviceInfo}?number=${number}&infoType=${type}&devType=${deviceType}`,
     method: 'get'
   });
 }

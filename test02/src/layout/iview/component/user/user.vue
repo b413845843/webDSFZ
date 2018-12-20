@@ -7,6 +7,7 @@
       <Avatar icon="ios-person" />
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
+        <DropdownItem name="info">个人信息</DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -39,6 +40,9 @@
       handleClick (name) {
         if (name === 'logout') {
           this.logout()
+        } else if (name === 'info') {
+          console.log(this.$router)
+          this.$router.push('/userInfo')
         }
       }
     }

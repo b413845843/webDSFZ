@@ -1,5 +1,7 @@
 var userDao = require('./userDao.js')
+var friendDao = require('./friendDao.js')
 var jwt = require('jsonwebtoken')
+const sequelize = require('../Sequelize')
 
 const config = require('../../config/jwt_config')
 const loggerFactory = require('../../log/log4js')
@@ -18,11 +20,18 @@ module.exports = {
     async getAllUsers() {
         try {
             let users = await userDao.getAllUsers()
-            let count = await userDao.usersCount()
-            return { users, count }
+            return { users }
         } catch (error) {
             return { err: error }
         }
+    },
+    async getUserByname(name) {
+      try {
+        let user = await userDao.getUserByname(name)
+        return { msg: 'ok', user: user[0] }
+      } catch (error) {
+        return { msg: '获取用户信息失败', err: error }
+      }
     },
     async getUsersByPage(page) {
         try {
@@ -94,5 +103,94 @@ module.exports = {
         } catch (error) {
             return { message: '删除失败', errcode: 4 }
         }
+    },
+    async makeFriend(uid, fid) {
+      try {
+        if (uid === fid) {
+          return { message: `不能添加自己为好友` }
+        }
+
+        const friends = await friendDao.findFriend(uid, fid)
+        if (friends.length) {
+          return { message: `已经是好友` }
+        } else {
+          let users = await userDao.getUserByIds([fid])
+          if (users.length !== 1) {
+            return { message: `用户不存在`, errcode: 6 }
+          }
+          await friendDao.makeFriend(uid, fid)
+          return { message: `好友添加成功` }
+        }
+      } catch (error) {
+          return { message: `好友添加失败${error}`, errcode: 5 }
+      }
+    },
+    async getFriendsList(uid) {
+      try {
+        const friends = await friendDao.getFriend(uid)
+        return friends
+      } catch (error) {
+        console.log(`getfriends list error ${error}`)
+          return []
+      }
+    },
+    async deleteFriend(uid, fid) {
+      try {
+       await friendDao.deleteFriend(uid, fid)
+       return { message: `好友删除成功`, errcode: 0 }
+      } catch (error) {
+          return { message: `好友删除失败${error}`, errcode: 5 }
+      }
+    },
+    async getUserByIds(ids) {
+      console.log(`按id 找名字`)
+      try {
+        const friends = await userDao.getUserByIds(ids)
+        return friends
+      } catch (error) {
+          return []
+      }
+    },
+    async getAllPrinters(s, f) {
+      sequelize.Printer
+                        .findAndCountAll()
+                        .then(res => {
+                          console.log(`获取打印机成功`)
+                         s({ message: `获取打印机成功`, errcode: 0, printers: res.rows, count: res.count })
+                        }).catch(error => {
+                          console.log(`获取失败${error}`)
+                          f({ message: `获取失败打印机`, errcode: 1 })
+                        })
+    },
+    addPrinter(printer, s, f) {
+      sequelize.Printer
+                        .findOrCreate({ where: { number: printer.number }, defaults: printer })
+                        .spread((printer, created) => {
+                          console.log(sequelize.Printer.getTableName({
+                            plain: true
+                          }))
+                          console.log(created)
+
+                          if (created) {
+                            console.log(`添加打印机成功`)
+                            s({ message: `添加打印机成功`, errcode: 0 })
+                          } else {
+                            console.log(`打印机已经添加过了`)
+                            f({ message: `打印机已经添加过了`, errcode: 0 })
+                          }
+                        })
+    },
+    deletePrinter(printer, s, f) {
+      sequelize.Printer
+                    .destroy({ where: {
+                      id: printer.id
+                    } })
+                    .then(res => {
+                      s({ message: `打印机删除成功`, errcode: 0 })
+                    })
+                    .catch(error => {
+                      console.log(`打印机删除错误 ${error}`);
+                      f({ message: `打印机删除错误`, errcode: 0 })
+                    })
     }
 }

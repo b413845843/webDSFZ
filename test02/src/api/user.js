@@ -7,7 +7,12 @@ const registerUrl = baseUrl + '/register'
 const getAllUsersUrl = baseUrl + '/getAllUsers'
 const updateUserUrl = baseUrl + '/update'
 const deleteUserUrl = baseUrl + '/delete'
-
+const getUserInfoUrl = baseUrl + '/getUserInfo'
+const makeFriendUrl = baseUrl + '/makeFriend'
+const deleteFriendUrl = baseUrl + '/deleteFriend'
+const addPrinterUrl = baseUrl + '/addPrinter'
+const getAllPrintersUrl = baseUrl + '/getAllPrinters'
+const deletePrinterUrl = baseUrl + '/deletePrinter'
 let userService = {
   dingding(message) {
     return service({
@@ -44,11 +49,43 @@ let userService = {
       }
     });
   },
+  makeFriend(uid, fid) {
+    return service({
+      url: makeFriendUrl,
+      method: 'post',
+      data: {
+        uid,
+        fid
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  },
+  deleteFriend(uid, fid) {
+    return service({
+      url: deleteFriendUrl,
+      method: 'post',
+      data: {
+        uid,
+        fid
+      },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  },
   getAllUsers(page) {
     return service({
       url: getAllUsersUrl,
       method: 'get',
       params: page
+    })
+  },
+  getUserInfo() {
+    return service({
+      url: getUserInfoUrl,
+      method: 'get'
     })
   },
   updateUser(user) {
@@ -63,6 +100,26 @@ let userService = {
       url: deleteUserUrl,
       method: 'post',
       data: { id: id }
+    })
+  },
+  addPrinter(printer) {
+    return service({
+      url: addPrinterUrl,
+      method: 'post',
+      data: printer
+    })
+  },
+  getAllPrinters() {
+    return service({
+      url: getAllPrintersUrl,
+      method: 'get'
+    })
+  },
+  deletePrinter(printer) {
+    return service({
+      url: deletePrinterUrl,
+      method: 'post',
+      data: printer
     })
   }
 }

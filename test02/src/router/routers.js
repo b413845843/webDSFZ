@@ -3,9 +3,12 @@ let PrinterInfoView = () => import('@/layout/iview/printer-info-view')
 let LoginView = () => import('@/layout/iview/login-view')
 let error404 = () => import('@/layout/iview/error-pages/404.vue')
 let error401 = () => import('@/layout/iview/error-pages/401.vue')
-let userManagerView = () => import('@/layout/iview/user-manager-view')
+
 let chatView = () => import('@/layout/iview/chat-view')
 let pdfPreView = () => import('@/layout/iview/pdf-preview')
+
+let userManagerView = () => import('@/layout/iview/user-manager-view')
+let userInfoView = () => import('@/layout/iview/user-info-view')
 const Foo = {
   template: '<div class="foo">foo</div>'
 }
@@ -40,6 +43,14 @@ export default [{
         component: userManagerView,
         meta: {
           title: '用户管理'
+        }
+      },
+      {
+        path: 'userInfo',
+        name: 'userInfo',
+        component: userInfoView,
+        meta: {
+          title: '用户信息'
         }
       },
       {

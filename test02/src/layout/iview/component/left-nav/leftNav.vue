@@ -8,7 +8,7 @@
       <Submenu name="1">
         <template slot="title">
           <Icon type="md-print"></Icon>
-          数据管理
+          打印机状态
         </template>
         <MenuItem name="1-1" to="/home/">打印机</MenuItem>
       </Submenu>
@@ -16,12 +16,15 @@
       <Submenu name="2">
         <template slot="title">
           <Icon type="md-contact"></Icon>
-          用户管理
+          资料管理
         </template>
         <MenuItem name="2-1" to="/usersManager">
           用户
         </MenuItem>
-        <MenuItem name="2-2" to="/chat">
+        <MenuItem name="2-2" to="/userInfo">
+          好友
+        </MenuItem>
+        <MenuItem name="2-3" to="/chat">
           聊天室
         </MenuItem>
         

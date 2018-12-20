@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/hello', (req, res, next) => {
+router.get('/getAllUsers', (req, res, next) => {
   res.send('hello')
 })
 
