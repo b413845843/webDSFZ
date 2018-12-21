@@ -2,14 +2,17 @@
   <Card>
     <Card>
       <p slot="title">个人资料</p>
-      <p> id:{{info.id}} name:{{info.username}} mail:{{info.mail}}</p>
+      <p> id:{{info.id}} name:{{info.name}} mail:{{info.email}}</p>
     </Card>
     
     <Card class="card">
       <p slot="title">可添加好友用户</p>
       <Row style="margin:4px" v-for="friend in friends" align="middle">
+        <Col span="2">
+          <span style="padding:4px"> id:{{friend.id}}</span>
+        </Col> 
         <Col span="4">
-          <span style="padding:4px">{{friend.username}}  id:{{friend.id}}</span>
+          <span style="padding:4px"> {{friend.name}} </span>
         </Col> 
       </Row>
       <Input v-model="addWho" placeholder="输入想要添加的好友id..." number @on-enter="makeFriend"></Input>
@@ -20,7 +23,7 @@
       <p slot="title">当前好友</p>
        <Row style="margin:4px" v-for="(friend, index) in oldFriends" type="flex"  justify="space-between" align="middle">
       <Col span="4">
-        <span style="padding:4px">{{friend.username}}</span>
+        <span style="padding:4px">{{friend.name}}</span>
       </Col> 
       <Col span="4">
         <Button type="error" style="float:right"  @click="deleteFriend(index)">删除</Button>
@@ -48,6 +51,25 @@
     </Row>
   </Card>
 
+  <Divider>组</Divider>
+   <Card>
+     <p slot="title">添加组</p>
+     <Input v-model="group.name" placeholder="名字" @on-enter="addGroup"></Input>
+      <Button @click="addGroup">添加组</Button>
+   </Card>
+
+  <Card class="card">
+      <p slot="title">当前组</p>
+       <Row style="margin:4px" v-for="(group, index) in groups" type="flex"  justify="space-between" align="middle">
+      <Col span="10">
+        <span style="padding:4px">{{group.name}}</span>
+      </Col> 
+      <Col span="4">
+        <Button type="error" style="float:right"  @click="deleteGroup(index)">删除</Button>
+      </Col> 
+    </Row>
+  </Card>
+
   </Card>
 </template>
 
@@ -66,6 +88,7 @@ export default {
     return {
       users: [],
       printers: [],
+      groups: [],
       friends: [],
       addWho: null,
       info: {},
@@ -73,6 +96,9 @@ export default {
       printer: {
         name: '',
         number: ''
+      },
+      group: {
+        name: ''
       }
     }
   },
@@ -104,6 +130,11 @@ export default {
         this.$Message.error({
           content: `全部打印机获取失败 ${err}`
         })
+      })
+
+      userService.getAllGroups().then(res => {
+        this.groups = res.data.groups
+        console.log(this.groups)
       })
     },
     makeFriend() {
@@ -154,8 +185,6 @@ export default {
     },
     deletePrinter(index) {
       console.log(index)
-      const uid = this.info.id
-      const fid = this.oldFriends[index]['id']
       let p = this.printers[index]
        userService.deletePrinter(p).then(res => {
           this.$Message.info({
@@ -168,8 +197,35 @@ export default {
           })
         })
     },
-  },
-  
+    addGroup() {
+      this.group.mid = this.info.id
+      console.log(`fuck`)
+      userService.addGroup(this.group).then(res => {
+          this.$Message.info({
+            content: res.data.message
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$Message.error({
+            content: `添加组失败 ${err}`
+          })
+        })
+    },
+    deleteGroup(index) {
+      console.log(index)
+      let p = this.groups[index]
+       userService.deleteGroup(p).then(res => {
+          this.$Message.info({
+            content: res.data.message
+          })
+          this.fetchData()
+        }).catch(err => {
+          this.$Message.error({
+            content: `删除组失败 ${err}`
+          })
+        })
+    }
+  }
 }
 
 </script>

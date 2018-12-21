@@ -22,59 +22,17 @@ sequelize
     console.log(`sequelize 连接失败 ${err}`)
   })
 
+const Users = sequelize.import(getPath('/models/users'))
+
+const Friends = sequelize.import(getPath('/models/friends'))
+
 const Printer = sequelize.import(getPath('/models/printers'))
-// Printer.sync()
-//   .then(() => {
-//     console.log(`printer 表同步`)
-//   })
-//   .catch(err => {
-//     console.log(`printer 表同步出错 ${err}`)
-//   })
-
-// const User = sequelize.import(getPath('/models/users'))
-// User.sync()
-//   .then(() => {
-//     console.log(`User 表同步`)
-//   })
-//   .catch(err => {
-//     console.log(`User 表同步出错 ${err}`)
-//   })
-
-// const Friends = sequelize.import(getPath('/models/friends'))
-// Friends.sync()
-//   .then(() => {
-//     console.log(`Friends 表同步`)
-//   })
-//   .catch(err => {
-//     console.log(`Friends 表同步出错 ${err}`)
-//   })
 
 const Groups = sequelize.import(getPath('/models/groups'))
-// Groups.sync()
-//   .then(() => {
-//     console.log(`Groups 表同步`)
-//   })
-//   .catch(err => {
-//     console.log(`Groups 表同步出错 ${err}`)
-//   })
 
 const Group_user = sequelize.import(getPath('/models/group_user'))
-// Group_user.sync()
-//   .then(() => {
-//     console.log(`Group_user 表同步`)
-//   })
-//   .catch(err => {
-//     console.log(`Group_user 表同步出错 ${err}`)
-//   })
 
 const Group_printer = sequelize.import(getPath('/models/group_printer'))
-// Group_printer.sync()
-//   .then(() => {
-//     console.log(`Group_printer 表同步`)
-//   })
-//   .catch(err => {
-//     console.log(`Group_printer 表同步出错 ${err}`)
-//   })
 
 sequelize.sync()
   .then(() => {
@@ -83,11 +41,13 @@ sequelize.sync()
   .catch(err => {
     console.log(`表同步出错 ${err}`)
   })
+
 module.exports = {
   Printer,
-  // User,
-  // Friends,
+  Users,
+  Friends,
   Groups,
   Group_user,
-  Group_printer
+  Group_printer,
+  Sequelize
 }

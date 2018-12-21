@@ -13,7 +13,7 @@ router.get('/getAllUsers', async function (req, res, next) {
     console.log(`page and size ${req.query.page} ${req.query.size}`);
     result = await userService.getUsersByPage({ page: req.query.page, size: req.query.size })
   } else {
-    result = await userService.getAllUsers()
+    result = await userService.getUsersByPage()
   }
 
   if (!result.err) {
@@ -26,53 +26,50 @@ router.get('/getAllUsers', async function (req, res, next) {
 
 router.get('/getUserInfo', async (req, res) => {
   console.log('响应/getUserInfo');
-  console.log(req.user)
   let msg = await userService.getUserByname(req.user.name)
-  console.log(`>>>>>>>>> ${msg.msg}`)
+  console.log(`getUserInfo user信息: ${msg}`)
   let friends = await userService.getFriendsList(req.user.id)
-  console.log(`${JSON.stringify(friends)}`)
-  if (friends.length) {
-    friends = friends.map(f => {
-      return f.fid
-    })
-    friends = await userService.getUserByIds(friends)
+  console.log(`getUserInfo friend信息: ${msg}`)
+  // if (friends.length) {
+  //   friends = friends.map(f => {
+  //     return f.fid
+  //   })
+    // friends = await userService.getUserByIds(friends)
     msg.friends = friends
-  }
+  // }
   res.json(msg)
 })
 
 router.post('/register', async function (req, res, next) {
-  let username = req.body.username
+  let name = req.body.username
   let password = req.body.password
-  let mail = req.body.mail
+  let email = req.body.mail
 
   console.log(`${JSON.stringify(req.body)} 响应/register`);
 
-  const msg = await userService.register(username, password, mail)
-  console.log(msg);
-
-  res.send(msg)
+  userService.register({ name, password, email }, msg => {
+    res.send(msg)
+  }, msg => {
+    res.send(msg)
+  })
+  // console.log(msg);
 });
 
 router.post('/update', async function (req, res, next) {
   let user = req.body
-
   console.log(`${JSON.stringify(req.body)} 响应/update`);
-
   const msg = await userService.update(user)
-  console.log(msg);
-
   res.send(msg)
 });
 
 router.post('/delete', async function (req, res, next) {
   console.log(`${JSON.stringify(req.body)} 响应/delete`);
-  let id = req.body
+  let user = req.body
   if (req.user.remark !== '管理员') {
     console.log('没有权限,非法操作');
     res.json({ message: '没有权限', errcode: 4 })
   } else {
-    const msg = await userService.deleteUserById(id)
+    const msg = await userService.deleteUserById(user)
     console.log(msg);
 
     res.send(msg)
@@ -133,5 +130,25 @@ router.post('/deletePrinter', (req, res) => {
   }, (msg) => {
     res.send(msg)
   })
+})
+
+router.post('/addGroup', async (req, res) => {
+  console.log(`${JSON.stringify(req.body)} 响应/addGroup`);
+  const group = req.body
+  const msg = await userService.addGroup(group)
+  res.send(msg)
+})
+
+router.get('/getAllGroups', async (req, res) => {
+  console.log(`响应/getAllGroups`);
+  let msg = await userService.getAllGroups()
+  res.send(msg)
+})
+
+router.post('/deleteGroup', async (req, res) => {
+  console.log(`响应/deleteGroup`);
+  const group = req.body
+  let msg = await userService.deleteGroup(group)
+  res.send(msg)
 })
 module.exports = router;

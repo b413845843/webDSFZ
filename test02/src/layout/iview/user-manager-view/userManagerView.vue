@@ -25,16 +25,16 @@ export default {
       pageSize: 5,
       cols: [{
         title: '用户名',
-        key: 'username'
+        key: 'name'
       },
-      {
-        title: '密码',
-        key: 'password',
-        editable: true
-      },
+      // {
+      //   title: '密码',
+      //   key: 'password',
+      //   editable: true
+      // },
       {
         title: '邮箱',
-        key: 'mail',
+        key: 'email',
         editable: true
       },
       {

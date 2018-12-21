@@ -2,10 +2,10 @@ var pool = require('../db.js')
 const table = 'users'
 
 const selectAll = `SELECT * FROM ${table}`
-const selectByName = `SELECT * FROM ${table} where username = ?`
-const inserUser = `INSERT INTO ${table}(username,password,mail) VALUES(?,?,?)`
+const selectByName = `SELECT * FROM ${table} where name = ?`
+const inserUser = `INSERT INTO ${table}(name,password,mail) VALUES(?,?,?)`
 const deleteUser = `DELETE FROM ${table} where id=?`
-const allCount = `SELECT COUNT(*) AS count FROM ${table}`
+
 // const selectPage = `SELECT * FROM ${table} WHERE id>=? ORDER BY id ASC LIMIT 0,?`
 // const updateUser = `UPDATE ${table} SET ?=? WHERE id=?`
 let userDao = {

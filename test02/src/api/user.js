@@ -10,9 +10,13 @@ const deleteUserUrl = baseUrl + '/delete'
 const getUserInfoUrl = baseUrl + '/getUserInfo'
 const makeFriendUrl = baseUrl + '/makeFriend'
 const deleteFriendUrl = baseUrl + '/deleteFriend'
+
 const addPrinterUrl = baseUrl + '/addPrinter'
 const getAllPrintersUrl = baseUrl + '/getAllPrinters'
 const deletePrinterUrl = baseUrl + '/deletePrinter'
+const addGroupUrl = baseUrl + '/addGroup'
+const getAllGroupsUrl = baseUrl + '/getAllGroups'
+const deleteGroupUrl = baseUrl + '/deleteGroup'
 let userService = {
   dingding(message) {
     return service({
@@ -117,9 +121,29 @@ let userService = {
   },
   deletePrinter(printer) {
     return service({
-      url: deletePrinterUrl,
+      url: this.deletePrinterUrl,
       method: 'post',
       data: printer
+    })
+  },
+  addGroup(group) {
+    return service({
+      url: addGroupUrl,
+      method: 'post',
+      data: group
+    })
+  },
+  getAllGroups() {
+    return service({
+      url: getAllGroupsUrl,
+      method: 'get'
+    })
+  },
+  deleteGroup(group) {
+    return service({
+      url: deleteGroupUrl,
+      method: 'post',
+      data: group
     })
   }
 }

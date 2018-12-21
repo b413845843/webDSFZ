@@ -56,7 +56,7 @@ let friendDao = {
           reject(err)
           return
         }
-        con.query(getFriendList, [uid, fid], (err, result) => {
+        con.query(getFriendList, [uid], (err, result) => {
           if (err) {
             console.log(`GET FRIEND list error - ${err.message}`);
             reject(err)

@@ -56,7 +56,7 @@ export default {
         [HANDLE_REGISTER]({ commit }, { name, password, email }) {
             return new Promise((resolve, reject) => {
                 userService.register({ username: name, password: password, mail: email }).then(res => {
-                    if (res.data.message !== 'ok') {
+                    if (res.data.errcode !== 0 ) {
                         reject(res.data)
                     } else {
                         console.log(`注册成功 ${JSON.stringify(res.data)}`);
