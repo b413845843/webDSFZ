@@ -151,4 +151,35 @@ router.post('/deleteGroup', async (req, res) => {
   let msg = await userService.deleteGroup(group)
   res.send(msg)
 })
+
+router.get('/getAllOwnGroups', async (req, res) => {
+  console.log(`响应/getAllOwnGroups ${JSON.stringify(req.user)}`);
+  let msg = await userService.getAllOwnGroups(req.user)
+  res.send(msg)
+})
+
+router.post('/addUserToGroup', async (req, res) => {
+  console.log(`响应/addUserToGroup ${JSON.stringify(req.body)}`);
+  let msg = await userService.addUserToGroup(req.user.id, req.body.userName, req.body.gid)
+  res.send(msg)
+})
+
+router.get('/getUsersByGroup', async (req, res) => {
+  console.log(`响应/getUsersByGroup ${JSON.stringify(req.query.gid)}`);
+  let msg = await userService.getUsersByGroup(req.query.gid)
+  res.send(msg)
+})
+
+router.post('/addPrinterToGroup', async (req, res) => {
+  console.log(`响应/addPrinterToGroup ${JSON.stringify(req.body)}`);
+  let msg = await userService.addPrinterToGroup(req.body.number, req.body.gid)
+  res.send(msg)
+})
+
+router.get('/getPrintersByGroup', async (req, res) => {
+  console.log(`响应/getPrintersByGroup ${JSON.stringify(req.query.gid)}`);
+  let msg = await userService.getPrintersByGroup(req.query.gid)
+  res.send(msg)
+})
+
 module.exports = router;

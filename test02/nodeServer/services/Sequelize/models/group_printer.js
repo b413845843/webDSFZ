@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     pid: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    // 权限 0:管理员 1:普通用户
+    autho: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   })
 }

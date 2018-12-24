@@ -17,6 +17,15 @@ const deletePrinterUrl = baseUrl + '/deletePrinter'
 const addGroupUrl = baseUrl + '/addGroup'
 const getAllGroupsUrl = baseUrl + '/getAllGroups'
 const deleteGroupUrl = baseUrl + '/deleteGroup'
+
+const getAllOwnGroupsUrl = baseUrl + '/getAllOwnGroups'
+
+const addUserToGroupUrl = baseUrl + '/addUserToGroup'
+const getUsersByGroupUrl = baseUrl + '/getUsersByGroup'
+
+const addPrinterToGroupUrl = baseUrl + '/addPrinterToGroup'
+const getPrintersByGroupUrl = baseUrl + '/getPrintersByGroup'
+
 let userService = {
   dingding(message) {
     return service({
@@ -121,7 +130,7 @@ let userService = {
   },
   deletePrinter(printer) {
     return service({
-      url: this.deletePrinterUrl,
+      url: deletePrinterUrl,
       method: 'post',
       data: printer
     })
@@ -144,6 +153,50 @@ let userService = {
       url: deleteGroupUrl,
       method: 'post',
       data: group
+    })
+  },
+  getAllOwnGroups() {
+    return service({
+      url: getAllOwnGroupsUrl,
+      method: 'get'
+    })
+  },
+  addUserToGroup(userName, gid) {
+    return service({
+      url: addUserToGroupUrl,
+      method: 'post',
+      data: {
+        userName,
+        gid
+      }
+    })
+  },
+  getUsersByGroup(gid) {
+    return service({
+      url: getUsersByGroupUrl,
+      method: 'get',
+      params: {
+        gid
+      }
+    })
+  },
+  addPrinterToGroup(number, gid) {
+    return service({
+      url: addPrinterToGroupUrl,
+      method: 'post',
+      data: {
+        number,
+        gid
+      }
+    })
+  },
+  getPrintersByGroup(gid) {
+    return service({
+      url: getPrintersByGroupUrl,
+      method: 'get',
+      params: {
+        gid
+      }
     })
   }
 }

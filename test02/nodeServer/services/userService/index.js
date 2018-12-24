@@ -1,7 +1,10 @@
 var jwt = require('jsonwebtoken')
 const sequelize = require('../Sequelize')
 const User = sequelize.Users
+const Printer = sequelize.Printer
 const Group = sequelize.Groups
+const Group_User = sequelize.Group_user
+const Group_printer = sequelize.Group_printer
 
 const config = require('../../config/jwt_config')
 const loggerFactory = require('../../log/log4js')
@@ -59,10 +62,11 @@ module.exports = {
     },
     async login(username, password) {
       try {
-          let user = await User.find({ where: {
+          let user = await User.findOne({ where: {
             name: username,
             password: password
-          } })
+          },
+        attributes: ['name', 'remark', 'password', 'id'] })
 
           console.log(user.id)
           if (user) {
@@ -75,6 +79,7 @@ module.exports = {
             return { message: '用户或者密码错误', errcode: 2 }
           }
       } catch (error) {
+        console.log(`登录error${error}`)
           return { message: error.message, errcode: 1 }
       }
   },
@@ -260,17 +265,25 @@ module.exports = {
         console.log(newgroup)
         let res = await Group.findOrCreate({
           where: {
-            name: newgroup.name
+            name: newgroup.name,
+            mid: parseInt(newgroup.mid)
           },
-          default: newgroup })
+          default: {
+            name: newgroup.name,
+            mid: parseInt(newgroup.mid)
+          } })
           for (const key in res) {
             console.log(`key ${key}`)
           }
-          // let { group, created } = { ...res }
-          // console.log({ ...res })
-          // console.log(typeof res[1])
+
           if (res[1]) {
             console.log(`添加组成功`)
+            let group = res[0]
+            await Group_User.create({
+              uid: newgroup.mid,
+              gid: group.id
+            })
+
             return { message: `添加组成功`, errcode: 0 }
           } else {
             console.log(`组已经存在`)
@@ -279,6 +292,43 @@ module.exports = {
       } catch (error) {
         console.log(`组添加错误${error}`)
           return { message: `组添加错误`, errcode: 1 }
+      }
+    },
+    async addUserToGroup(mid, userName, gid) {
+      try {
+        const user = await User.findOne({
+          where: {
+            name: userName
+          }
+        })
+
+        if (!user) {
+          return { message: `不是好友或者用户不存在`, errcode: 0 }
+        }
+
+        console.log(user)
+        const res = await Group_User.findOrCreate({
+          where: {
+            gid: gid,
+            uid: user.id
+          },
+          defaults: {
+            uid: user.id,
+            gid: gid
+          }
+        })
+
+        if (res[1]) {
+          console.log(`添加组员成功`)
+
+          return { message: `添加组员成功`, errcode: 0 }
+        } else {
+          console.log(`组员已经存在`)
+          return { message: `组员已经存在`, errcode: 0 }
+        }
+      } catch (error) {
+        console.log(`添加组员错误${error}`)
+          return { message: `添加组员错误`, errcode: 1 }
       }
     },
     async updateGroup(group) {
@@ -317,5 +367,116 @@ module.exports = {
         console.log(`获取所有组错误${error}`)
           return { message: `获取所有组错误`, errcode: 1 }
       }
-    }
+    },
+    async getAllOwnGroups(user) {
+      try {
+        const groupIds = await Group_User.findAll({
+          where: {
+            uid: user.id
+          },
+          attributes: ['gid']
+        })
+
+        const groups = await Group.findAll({
+          where: {
+            id: {
+                [sequelize.Sequelize.Op.or]: groupIds.map(g => {
+                return g.gid
+              })
+            }
+          },
+          attributes: ['name', 'id']
+        })
+
+        return { groups: groups, message: `获取所拥有组成功`, errcode: 0 }
+      } catch (error) {
+        console.log(`获取所拥有组错误${error}`)
+          return { message: `获取拥有有组错误`, errcode: 1 }
+      }
+    },
+    async getUsersByGroup(gid) {
+      try {
+        const uids = await Group_User.findAll({
+          where: {
+            gid: parseInt(gid)
+          }
+        })
+        // console.log(`=>>${uids}`)
+        const users = await User.findAll({
+          where: {
+            id: {
+              [sequelize.Sequelize.Op.or]: uids.map(u => {
+                return u.uid
+              })
+            }
+          },
+          attributes: ['id', 'name']
+        })
+
+        return { users: users, message: `获取组成员成功`, errcode: 0 }
+      } catch (error) {
+        console.log(`获取组成员错误${error}`)
+        return { message: `获取组成员错误`, errcode: 1 }
+      }
+    },
+    async addPrinterToGroup(number, gid) {
+      try {
+        const printer = await Printer.findOne({
+          where: {
+            number
+          }
+        })
+
+        if (!printer) {
+          return { message: `打印机不存在`, errcode: 1 }
+        }
+
+        let res = await Group_printer.findOrCreate({
+          where: {
+            gid,
+            pid: printer.id
+          },
+          defaults: {
+            autho: 1
+          }
+        })
+
+        if (res[1]) {
+          console.log(`组添加打印机成功`)
+
+          return { message: `组添加打印机成功`, errcode: 0 }
+        } else {
+          console.log(`组打印机已经存在`)
+          return { message: `组打印机已经存在`, errcode: 0 }
+        }
+      } catch (error) {
+        console.log(`组添加打印机错误${error}`)
+        return { message: `获组添加打印机错误`, errcode: 1 }
+      }
+    },
+    async getPrintersByGroup(gid) {
+      try {
+        const pids = await Group_printer.findAll({
+          where: {
+            pid: parseInt(gid)
+          }
+        })
+        // console.log(`=>>${uids}`)
+        const printers = await Printer.findAll({
+          where: {
+            id: {
+              [sequelize.Sequelize.Op.or]: pids.map(u => {
+                return u.pid
+              })
+            }
+          },
+          attributes: ['id', 'name']
+        })
+
+        return { printers, message: `获取组打印机成功`, errcode: 0 }
+      } catch (error) {
+        console.log(`获取组打印机错误${error}`)
+        return { message: `获取组打印机错误`, errcode: 1 }
+      }
+    },
 }
