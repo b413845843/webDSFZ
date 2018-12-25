@@ -1,4 +1,5 @@
 var jwt = require('jsonwebtoken')
+const crypto = require('crypto')
 const sequelize = require('../Sequelize')
 const User = sequelize.Users
 const Printer = sequelize.Printer
@@ -16,6 +17,12 @@ function createToken(name, password, remark, id) {
         expiresIn: 60 * 60 * 24 // 授权时效24小时
     })
     return token
+}
+
+function createMd5Password(password, name) {
+  const saltPassword = name + ':' + password + ':' + 'funcgb'
+  const md5 = crypto.createHash('md5')
+  return md5.update(saltPassword).digest('hex')
 }
 
 module.exports = {
@@ -47,7 +54,7 @@ module.exports = {
           let offset = parseInt((page.page - 1) * page.size)
           let size = parseInt(page.size)
           console.log(page.size)
-            let res = await User.findAndCountAll({ attributes: ['name', 'id', 'email', 'remark'], limit: size, offset: offset })
+            let res = await User.findAndCountAll({ attributes: ['name', 'password', 'id', 'email', 'remark'], limit: size, offset: offset })
             let users = res.rows
             let count = res.count
             return { users, count }
@@ -61,19 +68,20 @@ module.exports = {
         }
     },
     async login(username, password) {
+      const slotPassword = createMd5Password(password, username)
       try {
           let user = await User.findOne({ where: {
             name: username,
-            password: password
+            password: slotPassword
           },
-        attributes: ['name', 'remark', 'password', 'id'] })
+          attributes: ['name', 'remark', 'password', 'id'] })
 
-          console.log(user.id)
           if (user) {
+            console.log(user.id)
             let remark = user.remark
             let id = user.id
-            const token = createToken(username, password, remark, id)
-            loginLogger.info(`用户(${remark}):${username} 进行了登录操作 token : ${token}`)
+            const token = createToken(user.name, user.password, remark, id)
+            loginLogger.info(`用户(${remark}):${user.name} 进行了登录操作 token : ${token}`)
             return { token: token, message: 'ok', remark: remark }
           } else {
             return { message: '用户或者密码错误', errcode: 2 }
@@ -84,22 +92,33 @@ module.exports = {
       }
   },
     register(user, s, f) {
-      User.findOrCreate({ where: [
+      const slotPassword = createMd5Password(user.password, user.name)
+      const oriPaswword = user.password
+      user.password = slotPassword
+      if (user.name === 'admin') {
+        user.remark = '管理员'
+      }
+      User.findOrCreate(
         {
-          name: user.name
-        },
-        {
-          email: user.email
+          where: {
+            [sequelize.Sequelize.Op.or]: {
+              name: user.name,
+              email: user.email
+            }
+          },
+          defaults: user
         }
-      ],
-      defaults: user }
       )
-      .spread(async (user, created) => {
+      .spread(async (newUser, created) => {
         if (created) {
-          const data = await this.login(user.name, user.password)
+          const data = await this.login(newUser.name, oriPaswword)
           return s({ token: data.token, message: 'ok', remark: data.remark, errcode: 0, f: 1 })
         } else {
-          return s({ message: '用户已存在', errcode: 2 })
+          if (newUser.name === user.name) {
+            return s({ message: '用户已被注册,请使用其他名称', errcode: 2 })
+          } else {
+            return s({ message: '邮箱已被使用', errcode: 2 })
+          }
         }
       }).catch(error => {
         console.log(error.errors)
@@ -377,6 +396,9 @@ module.exports = {
           attributes: ['gid']
         })
 
+        if (!groupIds || groupIds.length <=0) {
+          return { groups: [], message: `获取所拥有组失败`, errcode: 1 }
+        }
         const groups = await Group.findAll({
           where: {
             id: {
@@ -458,10 +480,14 @@ module.exports = {
       try {
         const pids = await Group_printer.findAll({
           where: {
-            pid: parseInt(gid)
+            gid: parseInt(gid)
           }
         })
-        // console.log(`=>>${uids}`)
+
+        if (!pids || pids.length <= 0) {
+          return { printers: [], message: `没有打印机`, errcode: 1 }
+        }
+
         const printers = await Printer.findAll({
           where: {
             id: {
@@ -470,7 +496,7 @@ module.exports = {
               })
             }
           },
-          attributes: ['id', 'name']
+          attributes: ['id', 'name', 'number']
         })
 
         return { printers, message: `获取组打印机成功`, errcode: 0 }

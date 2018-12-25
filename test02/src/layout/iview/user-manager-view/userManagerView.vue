@@ -27,11 +27,11 @@ export default {
         title: '用户名',
         key: 'name'
       },
-      // {
-      //   title: '密码',
-      //   key: 'password',
-      //   editable: true
-      // },
+      {
+        title: '密码',
+        key: 'password',
+        editable: true
+      },
       {
         title: '邮箱',
         key: 'email',

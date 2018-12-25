@@ -73,27 +73,27 @@
   <Divider>所在组</Divider>
   <Card class="card">
       <p slot="title">所在组</p>
-      <div  v-for="(group, index) in owngroups">
+      <Row  v-for="(group, index) in owngroups">
         <Row style="margin:4px">
           <Col>
             <span style="padding:4px">{{group.name}}</span>
           </Col> 
         </Row>
         <Row :gutter="4">
-          <Col span="14">
+          <Col span="18">
             <Input v-model="group.userName" placeholder="输入想要添加组员名称..." number @on-enter="addUserToGroup(index)"></Input>
           </Col>
           <Col span="3"> <Button type="success" style="width:100%;" @click="addUserToGroup(index)">添加组员</Button></Col>
           <Col span="3"><Button type="success" style="width:100%;" @click="getUsersByGroup(index)">查看组员</Button></Col>
         </Row>
         <Row :gutter="4" style="margin-top:4px;">
-          <Col span="14">
+          <Col span="18">
             <Input v-model="group.number" placeholder="输入想要添加打印机序列号..." number @on-enter="addPrinterToGroup(index)"></Input>
           </Col>
           <Col span="3"><Button type="success" style="width:100%;"  @click="addPrinterToGroup(index)">添加打印机</Button></Col>
           <Col span="3"><Button type="success" style="width:100%;" @click="getPrintersByGroup(index)">查看打印机</Button></Col>
         </Row>
-      </div>
+      </Row>
      
   </Card>
 
