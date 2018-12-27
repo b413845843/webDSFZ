@@ -9,12 +9,35 @@
           <login-form :isLogin="isLogin"></login-form>
         </Card>
     </div>
+   <canvas class="background"></canvas>
   </div>
 </template>
 
 <script>
   import './loginView.less'
+  import Particles from 'particlesjs'
   import LoginForm from '@/layout/iview/component/login-form'
+  window.onload = () => {
+     var particles = Particles.init({
+      selector: '.background',
+      color: '#DA0463',
+       maxParticles: 130,
+          connectParticles: true,
+          responsive: [
+            {
+              breakpoint: 768,
+              options: {
+                maxParticles: 80
+              }
+            }, {
+              breakpoint: 375,
+              options: {
+                maxParticles: 50
+              }
+            }
+          ]
+    });
+  }
 
   export default {
     name: 'LoginView',

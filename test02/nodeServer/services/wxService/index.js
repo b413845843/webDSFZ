@@ -3,9 +3,9 @@ let sha1 = require('sha1')
 
 let access_token = null
 const token = 'dascom666'
-const productID = 51054
+const productID = 51397
 const deviceIDUrl = 'https://api.weixin.qq.com/device/getqrcode'
-const tokenUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx4943f6480a79a436&secret=13a6a97f36ad0badbbfcf5473875cb43'
+const tokenUrl = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx7e8e5f8aa344fb60&secret=bdffa3f89b8042d1de240b91f17ddf59'
 
 module.exports = {
   verify(req, res, next) {
@@ -52,9 +52,9 @@ module.exports = {
           product_id: productID
         }
       })
-      const devID = result.data.deviceid
-      if (devID) {
-        return { devID }
+      const data = result.data
+      if (data) {
+        return { data }
       } else {
         return JSON.stringify(result.data) + deviceIDUrl
       }

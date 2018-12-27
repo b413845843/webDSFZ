@@ -26,26 +26,39 @@ function readFileToArr(fReadName, callback) {
   });
 }
 
+var get_client_ip = function(req) {
+  var ip = req.headers['x-forwarded-for'] ||
+      req.ip ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      req.connection.socket.remoteAddress || '';
+  if (ip.split(',').length > 0) {
+      ip = ip.split(',')[0]
+  }
+  const arr = ip.split(':')
+  ip = arr[arr.length - 1]
+  return ip;
+};
+
 // 微信平台校验
 router.get('/', (req, res, next) => {
-  wxLogger.info(`服务器回调 GET: ${JSON.stringify(req.query)}`)
-
+  const ip = get_client_ip(req)
+  const message = `服务器回调 IP:${ip} GET参数: ${JSON.stringify(req.query)}`
   let result = wxService.verify(req, res, next)
-
   if (result.res) {
     res.send(result.echostr);
-    wxLogger.info(`验证成功`)
+    wxLogger.info(`验证成功 => ` + message)
   } else {
-    wxLogger.info(`验证失败`)
+    wxLogger.info(`验证失败 => ` + message)
     res.render('wx_vaild', {
-      content: `验证失败:${req.query}`
+      content: `验证失败 => ${message}`
     })
   }
 })
 
 router.get('/token', async (req, res, next) => {
   let result = await wxService.token(req, res, next)
-  wxLogger.info(`获取access_token ${result}`);
+  wxLogger.info(`获取access_token成功 ${JSON.stringify(result)}`);
   res.render('get_device_id', {
     title: `获取access_token`,
     result: result.access_token || result
@@ -54,8 +67,8 @@ router.get('/token', async (req, res, next) => {
 
 router.get('/deviceid', async (req, res, next) => {
     let result = await wxService.deviceID(req, res, next)
-    const devID = result.deviceid
-    wxLogger.info(`获取deviceid:${result}`);
+    const devID = result.data
+    wxLogger.info(`获取deviceid:${JSON.stringify(result)}`);
     res.render('get_device_id', {
       title: `获取deviceid`,
       result: devID || result
