@@ -15,7 +15,7 @@
 
 ### 网站开发
 1. 熟悉 Java 编程语言以及了解 HTML,CSS, JavaScript 等前端语言.
-2. 熟悉 JSP、Servlet、Listener、Filter、EL、JSTL、JavaMail 等 JavaWeb 软件编程技术.
+2. 了解 JSP、Servlet、Listener、Filter、EL、JSTL、JavaMail 等 JavaWeb 软件编程技术.
 3. 了解 SpringBoot, Spring MVC, Hibernate 等主流开发框架.
 4. 熟悉 PHP编程语言并掌握热门TP框架.
 5. 了解 Linux 操作系统以及 Nginx 代理服务器.
