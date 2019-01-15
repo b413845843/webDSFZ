@@ -14,7 +14,7 @@
 ## 熟悉技能
 
 ### 网站开发
-1. 熟悉 Java 编程语言以及了解 HTML,CSS, JavaScript 等前端语言.
+1. 熟悉 HTML,CSS, JavaScript 等前端语言.
 4. 熟悉 PHP编程语言并掌握热门TP框架.
 5. 了解 Linux 操作系统以及 Nginx 代理服务器.
 6. 熟悉 Vue框架进行前端开发.
