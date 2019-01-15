@@ -15,8 +15,6 @@
 
 ### 网站开发
 1. 熟悉 Java 编程语言以及了解 HTML,CSS, JavaScript 等前端语言.
-2. 了解 JSP、Servlet、Listener、Filter、EL、JSTL、JavaMail 等 JavaWeb 软件编程技术.
-3. 了解 SpringBoot, Spring MVC, Hibernate 等主流开发框架.
 4. 熟悉 PHP编程语言并掌握热门TP框架.
 5. 了解 Linux 操作系统以及 Nginx 代理服务器.
 6. 熟悉 Vue框架进行前端开发.
@@ -106,7 +104,7 @@ SDK为模块式设计,主要分为打印内容模块,连接模块,日志模块
 
 项目名称:得实官网
 
-应用技术:Eclipse + JAVA + springMVC
+应用技术:VSCode + PHP
 
 项目描述:得实集团官网。项目基于spring框架,全程采用面向对象的编程模式.后台的主要功能包括商品的管理.
 
