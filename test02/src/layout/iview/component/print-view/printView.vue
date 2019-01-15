@@ -238,7 +238,7 @@
         if (this.printType === '图片') {
           this.sendData.datas = this.imageSource
         } else if (this.printType === '指令') {
-          this.sendData.datas = `${this.currentCmd}.Param=undefined`
+          this.sendData.datas = `${this.currentCmd}.Param=;`
         } else {
           //  文本或者是hex
           if (this.sendData.encodeType === 'base64') {
