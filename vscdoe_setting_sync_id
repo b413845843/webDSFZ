@@ -1,8 +1,82 @@
 CODE SETTINGS SYNC UPLOAD SUMMARY
 Version: 3.2.5
 --------------------
-GitHub Token: 3e9b957a292f2c68d76e9b5d2788cecb4958a83e
-GitHub Gist: 1c2281e648015cf09352b55245fbcdab
+GitHub Token: 3fucke9b957a292f2c68d76e9b5d2788cecb4958a83e
+GitHub Gist: 1fuckc2281e648015cf09352b55245fbcdab
+GitHub Gist Type: Secret
+
+Restarting Visual Studio Code may be required to apply color and file icon theme.
+--------------------
+Files Uploaded:
+  extensions.json > extensions.json
+  keybindings.json > keybindingsMac.json
+  locale.json > locale.json
+  settings.json > settings.json
+  html.json > snippets|html.json
+  log.code-snippets > snippets|log.code-snippets
+  log.json > snippets|log.json
+
+Extensions Ignored:
+  No extensions ignored.
+
+Extensions Removed:
+  No extensions removed.
+
+Extensions Added:
+  auto-close-tag v0.5.6
+  auto-rename-tag v0.0.15
+  beautify v1.4.9
+  bracket-pair-colorizer v1.0.61
+  code-settings-sync v3.2.5
+  cpptools v0.21.0
+  csharp v1.17.1
+  csharpextensions v1.3.0
+  dotenv v1.0.1
+  githistory v0.4.6
+  gitignore v0.6.0
+  gitlens v9.5.1
+  html-css-class-completion v1.18.0
+  iview-snippets v0.2.1
+  java v0.40.0
+  JavaScriptSnippets v1.7.2
+  LiveServer v5.5.1
+  luaide v0.7.5
+  mysql-syntax v1.3.1
+  path-intellisense v1.4.2
+  php-debug v1.12.6
+  php-intellisense v2.3.10
+  php-namespace-resolver v1.1.5
+  php-pack v1.0.2
+  phpserver v2.4.6
+  project-manager v10.3.2
+  sql-snippets v0.0.4
+  theme-dracula v2.16.0
+  vetur v0.16.2
+  vscode-apache v1.2.0
+  vscode-element-helper v0.5.5
+  vscode-eslint v1.8.0
+  vscode-exec-node v0.5.1
+  vscode-html-css v0.2.0
+  vscode-icons v8.2.0
+  vscode-intelephense-client v1.0.7
+  vscode-jade-snippets v1.0.1
+  vscode-java-debug v0.16.0
+  vscode-java-dependency v0.3.0
+  vscode-java-pack v0.6.0
+  vscode-java-test v0.14.1
+  vscode-JS-CSS-HTML-formatter v0.2.3
+  vscode-language-pack-zh-hans v1.31.4
+  vscode-leetcode v0.12.0
+  vscode-markdownlint v0.25.0
+  vscode-maven v0.14.2
+  vscode-svgviewer v2.0.0
+  vscodeintellicode v1.1.3
+--------------------
+Done.CODE SETTINGS SYNC UPLOAD SUMMARY
+Version: 3.2.5
+--------------------
+GitHub Token: 7cddf3dbe2881958849a5f051c370146b4839b4b
+GitHub Gist: 18e13abb522c847206d8d5b28e1e4360
 GitHub Gist Type: Secret
 
 Restarting Visual Studio Code may be required to apply color and file icon theme.
